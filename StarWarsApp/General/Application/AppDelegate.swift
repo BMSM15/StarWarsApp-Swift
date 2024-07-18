@@ -10,10 +10,20 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        window = UIWindow(frame: UIScreen.main.bounds)
+                
+        // Cria a ViewController inicial
+        let mainViewController = ViewController() // Substitua pelo nome da sua ViewController
+        let navigationController = UINavigationController(rootViewController: mainViewController)
+                
+        // Define o NavigationController como o rootViewController da janela
+        window?.rootViewController = navigationController
+        window?.makeKeyAndVisible()
+                
         return true
     }
 

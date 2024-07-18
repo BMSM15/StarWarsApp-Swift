@@ -16,6 +16,10 @@
 		AA4366A22C47E1D300712862 /* StarWarsAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4366A12C47E1D300712862 /* StarWarsAppTests.swift */; };
 		AA4366AC2C47E1D300712862 /* StarWarsAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4366AB2C47E1D300712862 /* StarWarsAppUITests.swift */; };
 		AA4366AE2C47E1D300712862 /* StarWarsAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4366AD2C47E1D300712862 /* StarWarsAppUITestsLaunchTests.swift */; };
+		AA4366BB2C47F50A00712862 /* DetailsViewControler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4366BA2C47F50A00712862 /* DetailsViewControler.swift */; };
+		AA4366BD2C47F65A00712862 /* DetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4366BC2C47F65A00712862 /* DetailsViewModel.swift */; };
+		AA4366BF2C47F68C00712862 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4366BE2C47F68C00712862 /* ViewModel.swift */; };
+		AA4366C12C47F88E00712862 /* StarWarsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4366C02C47F88E00712862 /* StarWarsCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +53,10 @@
 		AA4366A72C47E1D300712862 /* StarWarsAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StarWarsAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA4366AB2C47E1D300712862 /* StarWarsAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarWarsAppUITests.swift; sourceTree = "<group>"; };
 		AA4366AD2C47E1D300712862 /* StarWarsAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarWarsAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		AA4366BA2C47F50A00712862 /* DetailsViewControler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewControler.swift; sourceTree = "<group>"; };
+		AA4366BC2C47F65A00712862 /* DetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewModel.swift; sourceTree = "<group>"; };
+		AA4366BE2C47F68C00712862 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		AA4366C02C47F88E00712862 /* StarWarsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarWarsCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,9 +107,7 @@
 		AA4366892C47E1CF00712862 /* StarWarsApp */ = {
 			isa = PBXGroup;
 			children = (
-				AA43668A2C47E1CF00712862 /* AppDelegate.swift */,
-				AA43668C2C47E1CF00712862 /* SceneDelegate.swift */,
-				AA43668E2C47E1CF00712862 /* ViewController.swift */,
+				AA4366C42C48010500712862 /* General */,
 				AA4366902C47E1CF00712862 /* Main.storyboard */,
 				AA4366932C47E1D300712862 /* Assets.xcassets */,
 				AA4366952C47E1D300712862 /* LaunchScreen.storyboard */,
@@ -125,6 +131,44 @@
 				AA4366AD2C47E1D300712862 /* StarWarsAppUITestsLaunchTests.swift */,
 			);
 			path = StarWarsAppUITests;
+			sourceTree = "<group>";
+		};
+		AA4366C32C4800C800712862 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				AA43668C2C47E1CF00712862 /* SceneDelegate.swift */,
+				AA43668A2C47E1CF00712862 /* AppDelegate.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		AA4366C42C48010500712862 /* General */ = {
+			isa = PBXGroup;
+			children = (
+				AA4366C32C4800C800712862 /* Application */,
+				AA4366C72C4801A000712862 /* Details */,
+				AA4366C62C48017400712862 /* Home */,
+			);
+			path = General;
+			sourceTree = "<group>";
+		};
+		AA4366C62C48017400712862 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				AA4366C02C47F88E00712862 /* StarWarsCell.swift */,
+				AA4366BE2C47F68C00712862 /* ViewModel.swift */,
+				AA43668E2C47E1CF00712862 /* ViewController.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		AA4366C72C4801A000712862 /* Details */ = {
+			isa = PBXGroup;
+			children = (
+				AA4366BA2C47F50A00712862 /* DetailsViewControler.swift */,
+				AA4366BC2C47F65A00712862 /* DetailsViewModel.swift */,
+			);
+			path = Details;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -260,6 +304,10 @@
 			files = (
 				AA43668F2C47E1CF00712862 /* ViewController.swift in Sources */,
 				AA43668B2C47E1CF00712862 /* AppDelegate.swift in Sources */,
+				AA4366BD2C47F65A00712862 /* DetailsViewModel.swift in Sources */,
+				AA4366BB2C47F50A00712862 /* DetailsViewControler.swift in Sources */,
+				AA4366BF2C47F68C00712862 /* ViewModel.swift in Sources */,
+				AA4366C12C47F88E00712862 /* StarWarsCell.swift in Sources */,
 				AA43668D2C47E1CF00712862 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
