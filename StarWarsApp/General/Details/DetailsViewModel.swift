@@ -7,80 +7,83 @@
 
 import Foundation
 
-class CharacterDetailsViewModel {
-    private let characterDetails: CharacterDetails
-    
+class DetailsViewModel {
+    var character: CharacterDetails
+
     init(character: CharacterDetails) {
-        self.characterDetails = character
+        self.character = character
     }
-    
-    var name: String {
-        return characterDetails.name
-    }
-    
-    var gender: String {
-        return characterDetails.gender
-    }
-    
-    var language: String {
-        return characterDetails.language
-    }
-    
-    var avatarURL: String {
-        return characterDetails.avatarURL
-    }
-    
-    var vehicles: [String] {
-        return characterDetails.vehicles
-    }
-    
-    func fetchVehicles(completion: @escaping ([String]) -> Void) {
+
+    private let getDataService = GetData()
+    private var characterDetailsCache: [String: CharacterDetails] = [:]
+
+    func fetchVehicles(completion: @escaping () -> Void) {
         let group = DispatchGroup()
         var vehicleNames: [String] = []
-        
-        for vehicleURL in vehicles {
-            group.enter()
-            getData(from: vehicleURL) { (vehicle: Vehicle?, error) in
-                if let vehicle = vehicle {
-                    vehicleNames.append(vehicle.name)
+
+        func fetchVehiclePage(from url: String) {
+            getDataService.getData(from: url) { (result: Result<GetData.APIResponse<Vehicle>, Error>) in
+                switch result {
+                case .success(let response):
+                    vehicleNames.append(contentsOf: response.results.map { $0.name })
+
+                    if let nextURL = response.next {
+                        fetchVehiclePage(from: nextURL)
+                    } else {
+                        group.leave()
+                    }
+                case .failure(let error):
+                    print("Failed to fetch vehicle: \(error.localizedDescription)")
+                    group.leave()
                 }
-                group.leave()
             }
         }
-        
+
+        for vehicleURL in character.vehicles {
+            group.enter()
+            fetchVehiclePage(from: vehicleURL)
+        }
+
         group.notify(queue: .main) {
-            print("Vehicle fetch completed for \(self.name)")
-            completion(vehicleNames)
+            self.character.vehicles = vehicleNames
+            completion()
         }
     }
-    
-    // Função genérica para buscar dados da API
-    private func getData<T: Codable>(from url: String, completion: @escaping (T?, Error?) -> Void) {
-        guard let url = URL(string: url) else {
-            print("Invalid URL")
+
+    func fetchSpecies(from url: String?, completion: @escaping (String) -> Void) {
+        guard let url = url else {
+            completion("Unknown")
             return
         }
-        
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print("Failed to fetch data from URL: \(url.absoluteString) with error: \(error.localizedDescription)")
-            }
-            guard let data = data, error == nil else {
-                completion(nil, error)
-                return
-            }
-            
-            do {
-                let result = try JSONDecoder().decode(T.self, from: data)
-                print("Successfully fetched data from URL: \(url.absoluteString)")
-                completion(result, nil)
-            } catch {
-                print("Failed to decode data from URL: \(url.absoluteString) with error: \(error.localizedDescription)")
-                completion(nil, error)
+
+        getDataService.getData(from: url) { (result: Result<Species, Error>) in
+            switch result {
+            case .success(let species):
+                completion(species.language)
+            case .failure(let error):
+                print("Failed to fetch species: \(error.localizedDescription)")
+                completion("Unknown")
             }
         }
-        
-        task.resume()
+    }
+
+    func fetchCharacterDetails(for person: Person, completion: @escaping (CharacterDetails) -> Void) {
+        if let cachedDetails = characterDetailsCache[person.url] {
+            print("Cache hit for person: \(person.name)")
+            completion(cachedDetails)
+            return
+        }
+
+        print("Fetching details for person: \(person.name)")
+        let group = DispatchGroup()
+
+        group.enter()
+        fetchSpecies(from: person.species.first) { language in
+            let avatarURL = "https://eu.ui-avatars.com/api/?name=\(language.replacingOccurrences(of: " ", with: "+"))"
+            let characterDetails = CharacterDetails(name: person.name, gender: person.gender, language: language, avatarURL: avatarURL, vehicles: person.vehicles)
+            self.characterDetailsCache[person.url] = characterDetails
+            completion(characterDetails)
+            group.leave()
+        }
     }
 }
-

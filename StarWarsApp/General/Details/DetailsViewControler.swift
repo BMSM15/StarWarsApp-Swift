@@ -1,28 +1,18 @@
-//
-//  DetailsViewControler.swift
-//  StarWarsApp
-//
-//  Created by Bruno Martins on 17/07/2024.
-//
-
 import UIKit
 
 class DetailViewController: UIViewController {
-    
-    var viewModel: CharacterDetailsViewModel? {
+    var viewModel: DetailsViewModel? {
         didSet {
             setupUI()
-            fetchVehicles()
         }
     }
     
-    // Componentes UI
     private let nameLabel = UILabel()
     private let genderLabel = UILabel()
     private let languageImageView = UIImageView()
     private let vehiclesLabel = UILabel()
     
-    // Método chamado quando a visão é carregada
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -30,20 +20,17 @@ class DetailViewController: UIViewController {
         setupConstraints()
     }
     
-    // Configuração dos componentes da visão
     private func setupViews() {
         view.addSubview(nameLabel)
         view.addSubview(genderLabel)
         view.addSubview(languageImageView)
         view.addSubview(vehiclesLabel)
         
-        // Desativando a propriedade translatesAutoresizingMaskIntoConstraints para usar Auto Layout
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         genderLabel.translatesAutoresizingMaskIntoConstraints = false
         languageImageView.translatesAutoresizingMaskIntoConstraints = false
         vehiclesLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        // Configurações das labels e da imagem
         nameLabel.textAlignment = .left
         genderLabel.textAlignment = .left
         vehiclesLabel.textAlignment = .left
@@ -52,7 +39,6 @@ class DetailViewController: UIViewController {
         languageImageView.contentMode = .scaleAspectFit
     }
     
-    // Configuração das restrições de Auto Layout
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             nameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
@@ -74,35 +60,48 @@ class DetailViewController: UIViewController {
         ])
     }
     
-    // Configuração da interface do usuário com dados do ViewModel
     private func setupUI() {
         guard let viewModel = viewModel else { return }
         
-        title = viewModel.name
-        nameLabel.text = "Name: \(viewModel.name)"
-        genderLabel.text = "Gender: \(viewModel.gender)"
+        title = viewModel.character.name
+        nameLabel.text = "Name: \(viewModel.character.name)"
+        genderLabel.text = "Gender: \(viewModel.character.gender)"
         
-        // Baixar imagem de avatar
-        if let url = URL(string: viewModel.avatarURL) {
-            URLSession.shared.dataTask(with: url) { (data, response, error) in
-                guard let data = data, error == nil else { return }
-                DispatchQueue.main.async {
-                    self.languageImageView.image = UIImage(data: data)
-                }
-            }.resume()
-        }
+        languageImageView.setImageURL(viewModel.character.avatarURL)
+        
+        vehiclesLabel.text = (viewModel.character.vehicles)
+    }
+}
+
+extension UIImageView {
+    
+    func setImageURL(_ url: String) {
+        setImageURL(URL(string: url))
     }
     
-    // Busca os detalhes dos veículos
-    private func fetchVehicles() {
-        guard let viewModel = viewModel else { return }
-        
-        print("Fetching vehicles for character: \(viewModel.name)")
-        viewModel.fetchVehicles { vehicles in
-            print("Fetched vehicles: \(vehicles)")
-            DispatchQueue.main.async {
-                self.vehiclesLabel.text = "Vehicles: \(vehicles.joined(separator: ", "))"
+    func setImageURL(_ url: URL?) {
+        guard let url = url else {
+            self.image = nil
+            return
+        }
+        DispatchQueue.global().async {
+            if let data = try? Data(contentsOf: url) {
+                DispatchQueue.main.async {
+                    self.image = UIImage(data: data)
+                }
             }
         }
     }
 }
+
+/*
+ detailsViewModel.fetchCharacterDetails(for: selectedPerson) { [weak self] details in
+     DispatchQueue.main.async {
+         let detailVC = DetailViewController()
+         var detailsViewModel = DetailsViewModel(character: details)
+         self?.navigationController?.pushViewController(detailVC, animated: true)
+     }
+ }
+ */
+ 
+

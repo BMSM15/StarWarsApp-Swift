@@ -52,13 +52,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let selectedPerson = viewModel.people[indexPath.item]
-        viewModel.fetchCharacterDetails(for: selectedPerson) { [weak self] details in
-            let detailVC = DetailViewController()
-            detailVC.viewModel = CharacterDetailsViewModel(character: details)
-            self?.navigationController?.pushViewController(detailVC, animated: true)
+            let selectedPerson = viewModel.people[indexPath.item]
         }
-    }
     
     // MARK: UIScrollViewDelegate
     
