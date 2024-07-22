@@ -52,8 +52,21 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            let selectedPerson = viewModel.people[indexPath.item]
-        }
+        let selectedPerson = viewModel.people[indexPath.item]
+        let characterDetails = CharacterDetails(
+            name: selectedPerson.name,
+            gender: selectedPerson.gender,
+            language: "Unknown", // This will be fetched later
+            avatarURL: "", // This will be generated later
+            vehicles: []
+        )
+        let detailsViewModel = DetailsViewModel(character: characterDetails, person: selectedPerson)
+        let detailsViewController = DetailsViewController()
+        detailsViewController.viewModel = detailsViewModel
+        navigationController?.pushViewController(detailsViewController, animated: true)
+    }
+
+
     
     // MARK: UIScrollViewDelegate
     
@@ -63,11 +76,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let height = scrollView.frame.size.height
         
         if offsetY > contentHeight - height - 200 {
-            viewModel.fetchData { [weak self] in
-                DispatchQueue.main.async {
-                    self?.collectionView.reloadData()
-                }
-            }
+            fetchInitialData()
         }
     }
 }

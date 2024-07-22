@@ -21,7 +21,7 @@
 		AA4366A22C47E1D300712862 /* StarWarsAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4366A12C47E1D300712862 /* StarWarsAppTests.swift */; };
 		AA4366AC2C47E1D300712862 /* StarWarsAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4366AB2C47E1D300712862 /* StarWarsAppUITests.swift */; };
 		AA4366AE2C47E1D300712862 /* StarWarsAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4366AD2C47E1D300712862 /* StarWarsAppUITestsLaunchTests.swift */; };
-		AA4366BB2C47F50A00712862 /* DetailsViewControler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4366BA2C47F50A00712862 /* DetailsViewControler.swift */; };
+		AA4366BB2C47F50A00712862 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4366BA2C47F50A00712862 /* DetailsViewController.swift */; };
 		AA4366BD2C47F65A00712862 /* DetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4366BC2C47F65A00712862 /* DetailsViewModel.swift */; };
 		AA4366BF2C47F68C00712862 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4366BE2C47F68C00712862 /* ViewModel.swift */; };
 		AA4366C12C47F88E00712862 /* StarWarsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4366C02C47F88E00712862 /* StarWarsCell.swift */; };
@@ -63,7 +63,7 @@
 		AA4366A72C47E1D300712862 /* StarWarsAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StarWarsAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA4366AB2C47E1D300712862 /* StarWarsAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarWarsAppUITests.swift; sourceTree = "<group>"; };
 		AA4366AD2C47E1D300712862 /* StarWarsAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarWarsAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		AA4366BA2C47F50A00712862 /* DetailsViewControler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewControler.swift; sourceTree = "<group>"; };
+		AA4366BA2C47F50A00712862 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 		AA4366BC2C47F65A00712862 /* DetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewModel.swift; sourceTree = "<group>"; };
 		AA4366BE2C47F68C00712862 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		AA4366C02C47F88E00712862 /* StarWarsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarWarsCell.swift; sourceTree = "<group>"; };
@@ -188,7 +188,7 @@
 		AA4366C72C4801A000712862 /* Details */ = {
 			isa = PBXGroup;
 			children = (
-				AA4366BA2C47F50A00712862 /* DetailsViewControler.swift */,
+				AA4366BA2C47F50A00712862 /* DetailsViewController.swift */,
 				AA4366BC2C47F65A00712862 /* DetailsViewModel.swift */,
 			);
 			path = Details;
@@ -331,7 +331,7 @@
 				AA4366BD2C47F65A00712862 /* DetailsViewModel.swift in Sources */,
 				AA3E96092C49150100080279 /* Species.swift in Sources */,
 				AA3E96072C4914EC00080279 /* Person.swift in Sources */,
-				AA4366BB2C47F50A00712862 /* DetailsViewControler.swift in Sources */,
+				AA4366BB2C47F50A00712862 /* DetailsViewController.swift in Sources */,
 				AA4366BF2C47F68C00712862 /* ViewModel.swift in Sources */,
 				AA4366C12C47F88E00712862 /* StarWarsCell.swift in Sources */,
 				AA43668D2C47E1CF00712862 /* SceneDelegate.swift in Sources */,

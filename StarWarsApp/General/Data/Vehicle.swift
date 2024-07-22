@@ -23,4 +23,5 @@ struct Vehicle: Codable {
     let films: [String]
     let created: String
     let edited: String
+    let url: String
 }
