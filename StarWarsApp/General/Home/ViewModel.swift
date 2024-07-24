@@ -1,43 +1,88 @@
 import Foundation
 
+enum LoadState {
+    case nextPage(Int)
+    case loadingPage(Int)
+    case hasAllResults
+    
+    var isNextPage: Bool {
+        switch self {
+        case .nextPage:
+            return true
+        default:
+            return false
+        }
+    }
+
+    var isLoadingPage: Bool {
+        switch self {
+        case .loadingPage:
+            return true
+        default:
+            return false
+        }
+    }
+
+    var isHasAllResults: Bool {
+        switch self {
+        case .hasAllResults:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 class ViewModel {
     private let urlPerson = "https://swapi.dev/api/people"
     var people: [Person] = []
     var fetchedURLs: Set<String> = [] // Track fetched URLs to prevent duplicates
-    var currentPage: Int = 1
-    var isFetching: Bool = false
-    let maxPeopleCount: Int = 82
-    private let services = Services()
+    var loadState: LoadState = .nextPage(1)
+    let services : Services
     
-    func fetchData(completion: @escaping () -> Void) {
-        guard !isFetching, people.count < maxPeopleCount else { return }
-        isFetching = true
-        print("Fetching data from page \(currentPage)...")
-        fetchPeople(from: "\(urlPerson)?page=\(currentPage)", completion: completion)
+    init(services: Services) {
+        self.services = services
     }
     
-    private func fetchPeople(from url: String, completion: @escaping () -> Void) {
-        print("Fetching people from URL: \(url)")
-        services.getCharacters(from: url) { [weak self] result in
-            guard let self = self else { return }
-            self.isFetching = false
+    var canLoadMore: Bool {
+        return loadState.isNextPage
+    }
+    
+    func fetchData(completion: @escaping (Bool) -> Void) {
+        guard case let .nextPage(page) = loadState else {
+            completion(false)
+            return
+        }
+        loadState = .loadingPage(page)
+        services.getCharacters(pageNumber: page) { [weak self] result in
+            guard let self = self else {
+                return
+            }
             
             switch result {
             case .success(let response):
-                let newPeople = response.results.filter { !self.fetchedURLs.contains($0.url) }
-                self.fetchedURLs.formUnion(newPeople.map { $0.url })
-                self.people.append(contentsOf: newPeople)
+                self.people.append(contentsOf: response.results)
                 print("Total People Count: \(self.people.count)")
-                
-                if self.people.count < self.maxPeopleCount, let _ = response.next {
-                    self.currentPage += 1
+                if self.people.count < response.count {
+                    self.loadState = .nextPage(page + 1)
+                } else {
+                    self.loadState = .hasAllResults
                 }
+                completion(true)
             case .failure(let error):
                 print("Failed to fetch people: \(error.localizedDescription)")
+                self.loadState = .nextPage(page)
+                completion(false)
             }
-            completion()
         }
     }
-    
-    
 }
+
+
+
+
+// StarWarsCell usar constraints e divir as labels em 2---------
+// Dependency injection 
+//StackViews
+
+

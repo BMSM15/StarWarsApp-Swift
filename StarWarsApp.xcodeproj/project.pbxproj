@@ -13,7 +13,6 @@
 		AA3E96072C4914EC00080279 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3E96062C4914EC00080279 /* Person.swift */; };
 		AA3E96092C49150100080279 /* Species.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3E96082C49150100080279 /* Species.swift */; };
 		AA43668B2C47E1CF00712862 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA43668A2C47E1CF00712862 /* AppDelegate.swift */; };
-		AA43668D2C47E1CF00712862 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA43668C2C47E1CF00712862 /* SceneDelegate.swift */; };
 		AA43668F2C47E1CF00712862 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA43668E2C47E1CF00712862 /* ViewController.swift */; };
 		AA4366922C47E1CF00712862 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA4366902C47E1CF00712862 /* Main.storyboard */; };
 		AA4366942C47E1D300712862 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA4366932C47E1D300712862 /* Assets.xcassets */; };
@@ -52,7 +51,6 @@
 		AA3E96082C49150100080279 /* Species.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Species.swift; sourceTree = "<group>"; };
 		AA4366872C47E1CF00712862 /* StarWarsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StarWarsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA43668A2C47E1CF00712862 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		AA43668C2C47E1CF00712862 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		AA43668E2C47E1CF00712862 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		AA4366912C47E1CF00712862 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		AA4366932C47E1D300712862 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -158,7 +156,6 @@
 		AA4366C32C4800C800712862 /* Application */ = {
 			isa = PBXGroup;
 			children = (
-				AA43668C2C47E1CF00712862 /* SceneDelegate.swift */,
 				AA43668A2C47E1CF00712862 /* AppDelegate.swift */,
 			);
 			path = Application;
@@ -334,7 +331,6 @@
 				AA4366BB2C47F50A00712862 /* DetailsViewController.swift in Sources */,
 				AA4366BF2C47F68C00712862 /* ViewModel.swift in Sources */,
 				AA4366C12C47F88E00712862 /* StarWarsCell.swift in Sources */,
-				AA43668D2C47E1CF00712862 /* SceneDelegate.swift in Sources */,
 				AA3E96052C49141E00080279 /* Vehicle.swift in Sources */,
 				AA3E96032C4911A500080279 /* CharacterDetails.swift in Sources */,
 			);
@@ -522,7 +518,6 @@
 				INFOPLIST_FILE = StarWarsApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -549,7 +544,6 @@
 				INFOPLIST_FILE = StarWarsApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (

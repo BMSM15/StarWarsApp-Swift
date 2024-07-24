@@ -1,29 +1,65 @@
 import UIKit
 
+protocol ViewControllerDelegate: AnyObject {
+    func viewController(_ viewController: UIViewController, needsOpenDetailsForCharacter person: Person)
+}
+
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    let collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        return collectionView
+    }()
+    let viewModel: ViewModel
+    private let activityIndicator = UIActivityIndicatorView(style: .large)
+    weak var delegate: ViewControllerDelegate?
     
-    var collectionView: UICollectionView!
-    var viewModel = ViewModel()
+    init(viewModel: ViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
-        fetchInitialData()
+        setupActivityIndicator()
+        fetchData()
     }
     
     private func setupCollectionView() {
-        let layout = UICollectionViewFlowLayout()
-        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
         collectionView.backgroundColor = .white
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(StarWarsCell.self, forCellWithReuseIdentifier: "StarWarsCell")
         view.addSubview(collectionView)
+        collectionView.pinTop(to: view)
+        collectionView.pinBottom(to: view)
+        collectionView.pinLeading(to: view)
+        collectionView.pinTrailing(to: view)
     }
     
-    private func fetchInitialData() {
-        viewModel.fetchData { [weak self] in
+    private func setupActivityIndicator() {
+        activityIndicator.hidesWhenStopped = true
+        view.addSubview(activityIndicator)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+    
+    private func fetchData() {
+        guard viewModel.canLoadMore else {
+            return
+        }
+        self.activityIndicator.startAnimating()
+        viewModel.fetchData { [weak self] _ in
             DispatchQueue.main.async {
+                self?.activityIndicator.stopAnimating()
                 self?.collectionView.reloadData()
             }
         }
@@ -39,10 +75,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StarWarsCell", for: indexPath) as! StarWarsCell
         
         let person = viewModel.people[indexPath.item]
-        cell.nameLabel.text = "Name: \(person.name)"
-        cell.genderLabel.text = "Gender: \(person.gender)"
+        cell.configure(with: person)
         
-        return cell
+        return cell 
     }
     
     // MARK: UICollectionViewDelegateFlowLayout
@@ -53,20 +88,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedPerson = viewModel.people[indexPath.item]
-        let characterDetails = CharacterDetails(
-            name: selectedPerson.name,
-            gender: selectedPerson.gender,
-            language: "Unknown", // This will be fetched later
-            avatarURL: "", // This will be generated later
-            vehicles: []
-        )
-        let detailsViewModel = DetailsViewModel(character: characterDetails, person: selectedPerson)
-        let detailsViewController = DetailsViewController()
-        detailsViewController.viewModel = detailsViewModel
-        navigationController?.pushViewController(detailsViewController, animated: true)
+        delegate?.viewController(self, needsOpenDetailsForCharacter: selectedPerson)
     }
-
-
     
     // MARK: UIScrollViewDelegate
     
@@ -76,8 +99,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let height = scrollView.frame.size.height
         
         if offsetY > contentHeight - height - 200 {
-            fetchInitialData()
+            fetchData()
         }
     }
+    
 }
-
