@@ -4,7 +4,7 @@ protocol ViewControllerDelegate: AnyObject {
     func viewController(_ viewController: UIViewController, needsOpenDetailsForCharacter person: Person)
 }
 
-class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchResultsUpdating {
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -13,6 +13,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     let viewModel: ViewModel
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     weak var delegate: ViewControllerDelegate?
+    let refreshControl = UIRefreshControl()
+    private let searchController = UISearchController(searchResultsController: nil)
     
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -25,13 +27,26 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupSearchController()
         setupCollectionView()
         setupActivityIndicator()
-        fetchData()
+        loadData()
+        setupRefreshControl()
+    }
+    
+    private func setupRefreshControl() {
+        refreshControl.attributedTitle = NSAttributedString(string: "")
+        refreshControl.addTarget(self, action: #selector(self.pullRefresh(_:)), for: .valueChanged)
+        collectionView.addSubview(refreshControl)
+    }
+    
+    @objc func pullRefresh(_ sender: AnyObject) {
+        reloadData()
     }
     
     private func setupCollectionView() {
         collectionView.backgroundColor = .white
+        collectionView.alwaysBounceVertical = true
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(StarWarsCell.self, forCellWithReuseIdentifier: "StarWarsCell")
@@ -40,6 +55,17 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         collectionView.pinBottom(to: view)
         collectionView.pinLeading(to: view)
         collectionView.pinTrailing(to: view)
+    }
+    
+    private func setupSearchController() {
+        self.searchController.searchResultsUpdater = self
+        self.searchController.obscuresBackgroundDuringPresentation = false
+        self.searchController.hidesNavigationBarDuringPresentation = false
+        self.searchController.searchBar.placeholder = "Search Characters"
+        
+        self.navigationItem.searchController = searchController
+        self.definesPresentationContext = false
+        self.navigationItem.hidesSearchBarWhenScrolling = false
     }
     
     private func setupActivityIndicator() {
@@ -52,14 +78,23 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         ])
     }
     
-    private func fetchData() {
+    private func loadData() {
         guard viewModel.canLoadMore else {
             return
         }
         self.activityIndicator.startAnimating()
-        viewModel.fetchData { [weak self] _ in
+        viewModel.loadData { [weak self] _ in
             DispatchQueue.main.async {
                 self?.activityIndicator.stopAnimating()
+                self?.collectionView.reloadData()
+            }
+        }
+    }
+    
+    func reloadData() {
+        viewModel.reloadData { [weak self] success in
+            DispatchQueue.main.async {
+                self?.refreshControl.endRefreshing()
                 self?.collectionView.reloadData()
             }
         }
@@ -73,11 +108,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StarWarsCell", for: indexPath) as! StarWarsCell
-        
         let person = viewModel.people[indexPath.item]
         cell.configure(with: person)
-        
-        return cell 
+        return cell
     }
     
     // MARK: UICollectionViewDelegateFlowLayout
@@ -97,10 +130,21 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
         let height = scrollView.frame.size.height
+        //let newOffset = CGPoint(x: 0, y: contentOffset.y)
         
         if offsetY > contentHeight - height - 200 {
-            fetchData()
+            loadData()
         }
     }
     
+    func updateSearchResults(for searchController: UISearchController) {
+        viewModel.searchTextDidChange(to: searchController.searchBar.text)
+        collectionView.reloadData()
+        print("Debug print:", searchController.searchBar.text)
+    }
 }
+
+
+// Pull to Refresh no ViewController
+// Subclass para Button
+// Adicionar Go To Home button no ErrorViewController

@@ -12,6 +12,14 @@ class StarWarsCell: UICollectionViewCell {
         setupConstraints()
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        nameLabel.text = ""
+        genderLabel.text = ""
+        nameInputLabel.text = ""
+        genderInputLabel.text = ""
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -38,6 +46,7 @@ class StarWarsCell: UICollectionViewCell {
         genderLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         nameLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         genderLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        
         nameInputLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
         genderInputLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
         nameInputLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)

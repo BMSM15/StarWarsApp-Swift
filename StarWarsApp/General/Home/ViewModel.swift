@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 enum LoadState {
     case nextPage(Int)
@@ -34,21 +35,31 @@ enum LoadState {
 }
 
 class ViewModel {
-    private let urlPerson = "https://swapi.dev/api/people"
-    var people: [Person] = []
-    var fetchedURLs: Set<String> = [] // Track fetched URLs to prevent duplicates
-    var loadState: LoadState = .nextPage(1)
-    let services : Services
+    
+    private enum Constants {
+        static let initialLoadState: LoadState = .nextPage(1)
+    }
+    
+    var people: [Person] {
+        return isFiltering ? filteredPeople : loadedPeople
+    }
+    private var loadState: LoadState = .nextPage(1)
+    private let services : Services
+    private var loadedPeople: [Person] = []
+    private var filteredPeople: [Person] = []
+    private var isFiltering: Bool = false
+        
+    
     
     init(services: Services) {
         self.services = services
     }
     
     var canLoadMore: Bool {
-        return loadState.isNextPage
+        return loadState.isNextPage && !isFiltering
     }
     
-    func fetchData(completion: @escaping (Bool) -> Void) {
+    func loadData(completion: @escaping (Bool) -> Void) {
         guard case let .nextPage(page) = loadState else {
             completion(false)
             return
@@ -61,9 +72,14 @@ class ViewModel {
             
             switch result {
             case .success(let response):
-                self.people.append(contentsOf: response.results)
-                print("Total People Count: \(self.people.count)")
-                if self.people.count < response.count {
+                if page == 1 {
+                    self.loadedPeople = response.results
+                } else {
+                    self.loadedPeople.append(contentsOf: response.results)
+                }
+                
+                print("Total People Count: \(self.loadedPeople.count)")
+                if self.loadedPeople.count < response.count {
                     self.loadState = .nextPage(page + 1)
                 } else {
                     self.loadState = .hasAllResults
@@ -76,13 +92,25 @@ class ViewModel {
             }
         }
     }
+    
+    func reloadData(completion: @escaping (Bool) -> Void) {
+        loadState = .nextPage(1)
+        loadData(completion: completion)
+    }
 }
 
-
-
-
-// StarWarsCell usar constraints e divir as labels em 2---------
-// Dependency injection 
-//StackViews
-
-
+extension ViewModel {
+        
+    public func searchTextDidChange(to searchText: String?) {
+        guard let searchText = searchText?.lowercased(),
+              !searchText.isEmpty else {
+            isFiltering = false
+            filteredPeople = []
+            return
+        }
+        isFiltering = true
+        filteredPeople = loadedPeople.filter {
+            $0.name.lowercased().contains(searchText)
+        }
+    }
+}

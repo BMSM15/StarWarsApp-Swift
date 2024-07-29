@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA3644DA2C528E3B0096A146 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3644D92C528E3B0096A146 /* Button.swift */; };
 		AA3E96012C49026900080279 /* GetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3E96002C49026900080279 /* GetData.swift */; };
 		AA3E96032C4911A500080279 /* CharacterDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3E96022C4911A500080279 /* CharacterDetails.swift */; };
 		AA3E96052C49141E00080279 /* Vehicle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3E96042C49141E00080279 /* Vehicle.swift */; };
@@ -24,6 +25,7 @@
 		AA4366BD2C47F65A00712862 /* DetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4366BC2C47F65A00712862 /* DetailsViewModel.swift */; };
 		AA4366BF2C47F68C00712862 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4366BE2C47F68C00712862 /* ViewModel.swift */; };
 		AA4366C12C47F88E00712862 /* StarWarsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4366C02C47F88E00712862 /* StarWarsCell.swift */; };
+		AA43F9BA2C5116F600665B1F /* ErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA43F9B92C5116F500665B1F /* ErrorViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AA3644D92C528E3B0096A146 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		AA3E96002C49026900080279 /* GetData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetData.swift; sourceTree = "<group>"; };
 		AA3E96022C4911A500080279 /* CharacterDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetails.swift; sourceTree = "<group>"; };
 		AA3E96042C49141E00080279 /* Vehicle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vehicle.swift; sourceTree = "<group>"; };
@@ -65,6 +68,7 @@
 		AA4366BC2C47F65A00712862 /* DetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewModel.swift; sourceTree = "<group>"; };
 		AA4366BE2C47F68C00712862 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		AA4366C02C47F88E00712862 /* StarWarsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarWarsCell.swift; sourceTree = "<group>"; };
+		AA43F9B92C5116F500665B1F /* ErrorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +96,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA3644D82C528E1C0096A146 /* Component */ = {
+			isa = PBXGroup;
+			children = (
+				AA3644D92C528E3B0096A146 /* Button.swift */,
+			);
+			path = Component;
+			sourceTree = "<group>";
+		};
 		AA3E960A2C49151100080279 /* Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -164,7 +176,9 @@
 		AA4366C42C48010500712862 /* General */ = {
 			isa = PBXGroup;
 			children = (
+				AA3644D82C528E1C0096A146 /* Component */,
 				AA4366C32C4800C800712862 /* Application */,
+				AA43F9B82C5116D600665B1F /* Error */,
 				AA3E960A2C49151100080279 /* Data */,
 				AA4366C72C4801A000712862 /* Details */,
 				AA4366C62C48017400712862 /* Home */,
@@ -185,10 +199,18 @@
 		AA4366C72C4801A000712862 /* Details */ = {
 			isa = PBXGroup;
 			children = (
-				AA4366BA2C47F50A00712862 /* DetailsViewController.swift */,
 				AA4366BC2C47F65A00712862 /* DetailsViewModel.swift */,
+				AA4366BA2C47F50A00712862 /* DetailsViewController.swift */,
 			);
 			path = Details;
+			sourceTree = "<group>";
+		};
+		AA43F9B82C5116D600665B1F /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				AA43F9B92C5116F500665B1F /* ErrorViewController.swift */,
+			);
+			path = Error;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -323,12 +345,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA43668F2C47E1CF00712862 /* ViewController.swift in Sources */,
+				AA43F9BA2C5116F600665B1F /* ErrorViewController.swift in Sources */,
 				AA43668B2C47E1CF00712862 /* AppDelegate.swift in Sources */,
 				AA3E96012C49026900080279 /* GetData.swift in Sources */,
 				AA4366BD2C47F65A00712862 /* DetailsViewModel.swift in Sources */,
 				AA3E96092C49150100080279 /* Species.swift in Sources */,
 				AA3E96072C4914EC00080279 /* Person.swift in Sources */,
 				AA4366BB2C47F50A00712862 /* DetailsViewController.swift in Sources */,
+				AA3644DA2C528E3B0096A146 /* Button.swift in Sources */,
 				AA4366BF2C47F68C00712862 /* ViewModel.swift in Sources */,
 				AA4366C12C47F88E00712862 /* StarWarsCell.swift in Sources */,
 				AA3E96052C49141E00080279 /* Vehicle.swift in Sources */,

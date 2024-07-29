@@ -1,5 +1,9 @@
 import UIKit
 
+protocol DetailsViewControllerDelegate: AnyObject {
+    func goBackToViewController()
+}
+
 class DetailsViewController: UIViewController {
     let viewModel: DetailsViewModel
     
@@ -7,16 +11,42 @@ class DetailsViewController: UIViewController {
     private let genderLabel = UILabel()
     private let languageImageView = UIImageView()
     private let vehiclesLabel = UILabel()
-    private let stackView = UIStackView()
+    private let principalStackView = UIStackView()
+    private let imageStackView = UIStackView()
+    private let textStackView = UIStackView()
     private let activityIndicator = UIActivityIndicatorView(style: .large)
+    let errorViewController = ErrorViewController()
+    weak var delegate: DetailsViewControllerDelegate?
     
     init(viewModel: DetailsViewModel) {
         self.viewModel = viewModel
+        
         super.init(nibName: nil, bundle: nil)
+        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupActions() {
+        errorViewController.retryButtonHandler = { [weak self] in
+            self?.loadCharacterDetails()
+            self?.hideErrorView()
+        }
+        errorViewController.goBackButtonHandler = { [weak self] in
+            self?.delegate?.goBackToViewController()
+        }
+    }
+    
+    func showErrorView() {
+        //errorViewController.delegate = self
+        
+        self.add(errorViewController)
+    }
+    
+    func hideErrorView() {
+        remove(errorViewController)
     }
     
     override func viewDidLoad() {
@@ -25,72 +55,85 @@ class DetailsViewController: UIViewController {
         setupViews()
         setupConstraints()
         loadCharacterDetails()
+        setupActions()
     }
     
     private func setupViews() {
         title = "StarWars Character"
-
-        view.addSubview(stackView)
+        
+        view.addSubview(principalStackView)
         view.addSubview(languageImageView)
         view.addSubview(activityIndicator)
-                
+        
         nameLabel.textAlignment = .left
         genderLabel.textAlignment = .left
         vehiclesLabel.textAlignment = .left
         vehiclesLabel.numberOfLines = 0
         vehiclesLabel.lineBreakMode = .byWordWrapping
-        languageImageView.contentMode = .scaleAspectFit
         
-        stackView.axis = .vertical
-        stackView.alignment = .leading
-        stackView.distribution = .equalSpacing
-        stackView.spacing = 10
-        stackView.addArrangedSubview(nameLabel)
-        stackView.addArrangedSubview(genderLabel)
-        stackView.addArrangedSubview(vehiclesLabel)
+        principalStackView.axis = .horizontal
+        principalStackView.alignment = .leading
+        principalStackView.distribution = .equalSpacing
         
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        languageImageView.translatesAutoresizingMaskIntoConstraints = false
+        principalStackView.addArrangedSubview(textStackView)
+        principalStackView.addArrangedSubview(imageStackView)
+        
+        textStackView.axis = .vertical
+        textStackView.alignment = .leading
+        textStackView.distribution = .equalSpacing
+        
+        textStackView.spacing = 10
+        textStackView.addArrangedSubview(nameLabel)
+        textStackView.addArrangedSubview(genderLabel)
+        textStackView.addArrangedSubview(vehiclesLabel)
+        
+        imageStackView.axis = .horizontal
+        imageStackView.addArrangedSubview(languageImageView)
+        imageStackView.contentMode = .scaleAspectFit
+        
+        principalStackView.translatesAutoresizingMaskIntoConstraints = false
+        textStackView.translatesAutoresizingMaskIntoConstraints = false
+        imageStackView.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.hidesWhenStopped = true
     }
     
+    
     private func setupConstraints() {
-         
-        nameLabel.pinTop(to: view, constant: 110)
-        nameLabel.pinLeading(to: view, constant: 10)
-        nameLabel.widthEqual(to: view, multiplier: 0.5)
         
-        genderLabel.pinTop(to: nameLabel, constant: 30)
-        genderLabel.pinLeading(to: view, constant: 10)
-        genderLabel.widthEqual(to: view, multiplier: 0.5)
-                
-        vehiclesLabel.pinTop(to: genderLabel, constant: 30)
-        vehiclesLabel.pinLeading(to: view, constant: 10)
-        vehiclesLabel.widthEqual(to: view, multiplier: 0.5)
-                    
-        languageImageView.pinTop(to: view, constant: 110)
-        languageImageView.pinLeading(to: nameLabel, constant: 200)
-        languageImageView.pinTrailing(to: view, constant: -10)
-        languageImageView.heightEqual(to: view, multiplier: 0.17)
-
+        principalStackView.pinTopSafeArea(to: view, constant: 10)
+        principalStackView.pinBottom(to: view, constant: 10)
+        principalStackView.pinTrailing(to: view, constant: 10)
+        principalStackView.pinLeading(to: view, constant: 10)
+        
+        textStackView.pinTop(to: principalStackView, constant: 50)
+        textStackView.pinLeading(to: principalStackView, constant: 10)
+        textStackView.widthEqual(to: principalStackView, multiplier: 0.5)
+        
+        imageStackView.pinLeading(to: textStackView, constant: 250)
+        imageStackView.heightEqual(to: principalStackView, multiplier: 0.15)
+        
         activityIndicator.centerHorizontally(to: view)
         activityIndicator.centerVertically(to: view)
         activityIndicator.tintColor = .red
     }
     
-    private func loadCharacterDetails() {
+    func loadCharacterDetails() {
         activityIndicator.startAnimating()
-            self.viewModel.fetchCharacterDetails { [weak self] details in
-                DispatchQueue.main.async {
-                    self?.activityIndicator.stopAnimating()
-                    if let details = details {
-                        self?.updateUI(with: details)
-                    }
+        self.viewModel.fetchCharacterDetails { [weak self] details in
+            DispatchQueue.main.async {
+                if Int.random(in: 0...10) > 5,
+                   let details = details {
+                    self?.updateUI(with: details)
+                } else {
+                    self?.showErrorView()
                 }
+                self?.activityIndicator.stopAnimating()
+                
             }
+        }
     }
-
+    
     private func updateUI(with details: CharacterDetails) {
         nameLabel.text = "Name: \(details.name)"
         genderLabel.text = "Gender: \(details.gender)"
@@ -99,11 +142,11 @@ class DetailsViewController: UIViewController {
     }
 }
 
-extension UIView{
+extension UIView {
     
     func usesAutoLayout() {
-            translatesAutoresizingMaskIntoConstraints = false
-        }
+        translatesAutoresizingMaskIntoConstraints = false
+    }
     
     @discardableResult
     func centerHorizontally(to parentView: UIView, constant: CGFloat = 0) -> NSLayoutConstraint {
@@ -128,6 +171,12 @@ extension UIView{
         usesAutoLayout()
         return heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: multiplier).activate()
     }
+    
+    @discardableResult
+    func pinTopSafeArea(to view: UIView, constant: CGFloat = 0) -> NSLayoutConstraint {
+        usesAutoLayout()
+        return safeAreaLayoutGuide.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: constant).activate()
+    }
 
     
     @discardableResult
@@ -142,26 +191,26 @@ extension UIView{
         return bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: constant).activate()
     }
     @discardableResult
-        func pinLeading(to view: UIView, constant: CGFloat = 0) -> NSLayoutConstraint {
-            usesAutoLayout()
-            return leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: constant).activate()
-        }
+    func pinLeading(to view: UIView, constant: CGFloat = 0) -> NSLayoutConstraint {
+        usesAutoLayout()
+        return leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: constant).activate()
+    }
     @discardableResult
-        func pinTrailing(to view: UIView, constant: CGFloat = 0) -> NSLayoutConstraint {
-            usesAutoLayout()
-            return trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -constant).activate()
-        }
+    func pinTrailing(to view: UIView, constant: CGFloat = 0) -> NSLayoutConstraint {
+        usesAutoLayout()
+        return trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -constant).activate()
+    }
     @discardableResult
-        func pinWidth(to constant: CGFloat) -> NSLayoutConstraint {
-            usesAutoLayout()
-            return widthAnchor.constraint(equalToConstant: constant).activate()
-        }
-
-        @discardableResult
-        func pinHeight(to constant: CGFloat) -> NSLayoutConstraint {
-            usesAutoLayout()
-            return heightAnchor.constraint(equalToConstant: constant).activate()
-        }
+    func pinWidth(to constant: CGFloat) -> NSLayoutConstraint {
+        usesAutoLayout()
+        return widthAnchor.constraint(equalToConstant: constant).activate()
+    }
+    
+    @discardableResult
+    func pinHeight(to constant: CGFloat) -> NSLayoutConstraint {
+        usesAutoLayout()
+        return heightAnchor.constraint(equalToConstant: constant).activate()
+    }
 }
 
 extension NSLayoutConstraint {
@@ -189,5 +238,36 @@ extension UIImageView {
                 }
             }
         }
+    }
+}
+
+//extension DetailsViewController : ErrorViewControllerDelegate {
+//    
+//    func errorViewControllerDidTapReloadButton(_ viewController: UIViewController) {
+//        loadCharacterDetails()
+//        hideErrorView()
+//    }
+//}
+
+extension UIViewController {
+    
+    func add(_ child: UIViewController, frame: CGRect? = nil) {
+        addChild(child)
+        //child.view.frame = self.view.frame
+        if frame != nil {
+            if let frame = frame {
+                child.view.frame = frame
+            }
+        } else {
+            child.view.frame = self.view.frame
+        }
+        view.addSubview(child.view)
+        child.didMove(toParent: self)
+    }
+    
+    func remove(_ child: UIViewController) {
+        child.willMove(toParent: nil)
+        child.view.removeFromSuperview()
+        child.removeFromParent()
     }
 }
