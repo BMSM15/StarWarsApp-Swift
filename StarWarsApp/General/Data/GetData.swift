@@ -22,8 +22,13 @@ class Services {
             .last!)
     }
     
-    func getCharacters(pageNumber: Int, completion: @escaping GetData.NetworkCompletion<GetData.APIResponse<Person>>) {
-        let url = "\(Services.apiPath)people?page=\(pageNumber)"
+    func getCharacters(searchText: String?, pageNumber: Int, completion: @escaping GetData.NetworkCompletion<GetData.APIResponse<Person>>) {
+        var url: String
+        if let searchText = searchText, !searchText.isEmpty {
+            url = "\(Services.apiPath)people?search=\(searchText)&page=\(pageNumber)"
+        } else {
+            url = "\(Services.apiPath)people?page=\(pageNumber)"
+        }
         print("Fetching people from URL: \(url)")
         getData.getData(from: url, completion: completion)
     }

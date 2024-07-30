@@ -1,0 +1,28 @@
+{
+	"imageURL": "https://developer.apple.com/swift/images/swift-og.png",
+	"name": "Bruno Martins",
+	"birthdate": "15-07-2002",
+	"videoURL": "https://videodelivery.net/e579b09022014f4be804adaa03650a04/manifest/video.m3u8",
+	"links": [
+		{
+			"title": "Record",
+			"url": "https://www.record.pt/",
+            "openMode": "INTERNAL"
+		},
+        {
+            "title": "RecordZ",
+            "url": "https://www.recordZZZZZZZ.pt/",
+            "openMode": "INTERNAL"
+        },
+		{
+			"title": "Google",
+			"url": "https://www.google.com/",
+            "openMode": "MODAL"
+		},
+        {
+            "title": "Google",
+            "url": "https://www.google.com/",
+            "openMode": "EXTERNAL"
+        }
+	]
+}

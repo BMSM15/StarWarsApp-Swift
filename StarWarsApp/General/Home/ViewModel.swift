@@ -1,5 +1,4 @@
 import Foundation
-import UIKit
 
 enum LoadState {
     case nextPage(Int)
@@ -7,30 +6,18 @@ enum LoadState {
     case hasAllResults
     
     var isNextPage: Bool {
-        switch self {
-        case .nextPage:
-            return true
-        default:
-            return false
-        }
+        if case .nextPage = self { return true }
+        return false
     }
-
+    
     var isLoadingPage: Bool {
-        switch self {
-        case .loadingPage:
-            return true
-        default:
-            return false
-        }
+        if case .loadingPage = self { return true }
+        return false
     }
-
+    
     var isHasAllResults: Bool {
-        switch self {
-        case .hasAllResults:
-            return true
-        default:
-            return false
-        }
+        if case .hasAllResults = self { return true }
+        return false
     }
 }
 
@@ -41,34 +28,46 @@ class ViewModel {
     }
     
     var people: [Person] {
-        return isFiltering ? filteredPeople : loadedPeople
+        return isSearching ? searchedPeople : loadedPeople
     }
-    private var loadState: LoadState = .nextPage(1)
-    private let services : Services
-    private var loadedPeople: [Person] = []
-    private var filteredPeople: [Person] = []
-    private var isFiltering: Bool = false
-        
     
+    var loadState: LoadState = Constants.initialLoadState
+    private let services: Services
+    private var loadedPeople: [Person] = []
+    var searchedPeople: [Person] = []
+    private(set) var isSearching: Bool = false
+    var searchText: String? {
+        didSet {
+            searchTextDidChange(to: searchText)
+        }
+    }
+    
+    var onWillLoadData: (() -> ())?
+    var onDataChanged: ((Bool) -> ())?
     
     init(services: Services) {
         self.services = services
     }
     
     var canLoadMore: Bool {
-        return loadState.isNextPage && !isFiltering
+        return loadState.isNextPage && !isSearching
     }
     
-    func loadData(completion: @escaping (Bool) -> Void) {
+    var canRefresh: Bool {
+        return isSearching && people.isEmpty && !loadState.isLoadingPage
+    }
+    
+    func loadData() {
         guard case let .nextPage(page) = loadState else {
-            completion(false)
+            onDataChanged?(false)
             return
         }
+        
         loadState = .loadingPage(page)
-        services.getCharacters(pageNumber: page) { [weak self] result in
-            guard let self = self else {
-                return
-            }
+        onWillLoadData?()
+        
+        services.getCharacters(searchText: searchText, pageNumber: page) { [weak self] result in
+            guard let self = self else { return }
             
             switch result {
             case .success(let response):
@@ -78,39 +77,73 @@ class ViewModel {
                     self.loadedPeople.append(contentsOf: response.results)
                 }
                 
-                print("Total People Count: \(self.loadedPeople.count)")
-                if self.loadedPeople.count < response.count {
+                if response.results.count < response.count {
                     self.loadState = .nextPage(page + 1)
                 } else {
                     self.loadState = .hasAllResults
                 }
-                completion(true)
+                self.onDataChanged?(true)
             case .failure(let error):
                 print("Failed to fetch people: \(error.localizedDescription)")
-                self.loadState = .nextPage(page)
-                completion(false)
+                self.loadState = .nextPage(page) // Keep the current page
+                self.onDataChanged?(false)
             }
         }
     }
     
-    func reloadData(completion: @escaping (Bool) -> Void) {
-        loadState = .nextPage(1)
-        loadData(completion: completion)
+    func reloadData() {
+        loadState = Constants.initialLoadState
+        loadData()
     }
-}
-
-extension ViewModel {
-        
-    public func searchTextDidChange(to searchText: String?) {
-        guard let searchText = searchText?.lowercased(),
-              !searchText.isEmpty else {
-            isFiltering = false
-            filteredPeople = []
+    
+    
+    func searchTextDidChange(to searchText: String?) {
+        guard let searchText = searchText?.lowercased(), !searchText.isEmpty else {
+            isSearching = false
+            searchedPeople = []
+            loadState = .nextPage(1)
+            onDataChanged?(true)
             return
         }
-        isFiltering = true
-        filteredPeople = loadedPeople.filter {
-            $0.name.lowercased().contains(searchText)
+        
+        guard case let .nextPage(page) = loadState else {
+            onDataChanged?(false)
+            return
+        }
+        
+        loadState = .loadingPage(page)
+        onWillLoadData?()
+        isSearching = true
+        
+        services.getCharacters(searchText: searchText, pageNumber: page) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let response):
+                if page == 1 {
+                    self.searchedPeople = response.results
+                } else {
+                    self.searchedPeople.append(contentsOf: response.results)
+                }
+                
+                if response.results.count + self.searchedPeople.count < response.count {
+                    self.loadState = .nextPage(page + 1)
+                } else {
+                    self.loadState = .hasAllResults
+                }
+                self.onDataChanged?(true)
+            case .failure(let error):
+                print("Failed to fetch people: \(error.localizedDescription)")
+                
+                if page == 1 {
+                    self.loadState = .nextPage(1)
+                } else {
+                    self.loadState = .nextPage(page)
+                }
+                self.onDataChanged?(false)
+            }
         }
     }
+    
 }
+

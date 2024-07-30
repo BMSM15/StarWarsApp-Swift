@@ -4,7 +4,7 @@ protocol ViewControllerDelegate: AnyObject {
     func viewController(_ viewController: UIViewController, needsOpenDetailsForCharacter person: Person)
 }
 
-class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchResultsUpdating {
+class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchResultsUpdating, UITabBarController {
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -16,6 +16,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     let refreshControl = UIRefreshControl()
     private let searchController = UISearchController(searchResultsController: nil)
     
+    
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -24,20 +25,44 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSearchController()
         setupCollectionView()
         setupActivityIndicator()
+        setupTabBarController()
+        viewModel.onDataChanged = { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.refreshControl.endRefreshing()
+                self?.activityIndicator.stopAnimating()
+                self?.collectionView.reloadData()
+                self?.toogleRefreshControl()
+            }
+        }
+        viewModel.onWillLoadData = { [weak self] in
+            self?.activityIndicator.startAnimating()
+            self?.toogleRefreshControl()
+        }
         loadData()
-        setupRefreshControl()
+    }
+        
+    private func toogleRefreshControl() {
+        if viewModel.canRefresh {
+            removeRefreshControl()
+        } else {
+           addRefreshControl()
+        }
     }
     
-    private func setupRefreshControl() {
+    private func addRefreshControl() {
         refreshControl.attributedTitle = NSAttributedString(string: "")
         refreshControl.addTarget(self, action: #selector(self.pullRefresh(_:)), for: .valueChanged)
         collectionView.addSubview(refreshControl)
+    }
+    
+    private func removeRefreshControl() {
+        refreshControl.removeFromSuperview()
     }
     
     @objc func pullRefresh(_ sender: AnyObject) {
@@ -55,6 +80,15 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         collectionView.pinBottom(to: view)
         collectionView.pinLeading(to: view)
         collectionView.pinTrailing(to: view)
+    }
+    
+    private func setupTabBarController() {
+        let settingsViewModel = SettingsViewModel()
+        let settingsViewController = SettingsViewController(viewModel: settingsViewModel)
+        self.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 0)
+        settingsViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .more, tag: 1)
+        
+
     }
     
     private func setupSearchController() {
@@ -82,22 +116,11 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         guard viewModel.canLoadMore else {
             return
         }
-        self.activityIndicator.startAnimating()
-        viewModel.loadData { [weak self] _ in
-            DispatchQueue.main.async {
-                self?.activityIndicator.stopAnimating()
-                self?.collectionView.reloadData()
-            }
-        }
+        viewModel.loadData()
     }
     
     func reloadData() {
-        viewModel.reloadData { [weak self] success in
-            DispatchQueue.main.async {
-                self?.refreshControl.endRefreshing()
-                self?.collectionView.reloadData()
-            }
-        }
+        viewModel.reloadData()
     }
     
     // MARK: UICollectionViewDataSource
@@ -130,21 +153,37 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
         let height = scrollView.frame.size.height
-        //let newOffset = CGPoint(x: 0, y: contentOffset.y)
         
         if offsetY > contentHeight - height - 200 {
-            loadData()
+            if viewModel.isSearching {
+                if viewModel.loadState.isNextPage {
+                    viewModel.searchTextDidChange(to: viewModel.searchText)
+                }
+            } else if viewModel.canLoadMore {
+                viewModel.loadData()
+            }
         }
     }
-    
+
     func updateSearchResults(for searchController: UISearchController) {
-        viewModel.searchTextDidChange(to: searchController.searchBar.text)
-        collectionView.reloadData()
-        print("Debug print:", searchController.searchBar.text)
+        viewModel.searchText = searchController.searchBar.text
+    }
+    
+}
+
+extension ViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        // Perform the search when the user presses "Search" or "Enter"
+        viewModel.searchText = searchBar.text
+        searchBar.resignFirstResponder() // Dismiss the keyboard
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        // Handle the cancel button if needed
+        viewModel.searchText = nil
+        searchBar.text = nil
+        searchBar.resignFirstResponder() // Dismiss the keyboard
     }
 }
 
 
-// Pull to Refresh no ViewController
-// Subclass para Button
-// Adicionar Go To Home button no ErrorViewController
