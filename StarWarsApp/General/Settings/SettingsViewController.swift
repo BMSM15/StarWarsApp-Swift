@@ -6,10 +6,15 @@
 //
 // SettingsViewController.swift
 import UIKit
+import AVKit
 
 class SettingsViewController: UIViewController {
     private let viewModel: SettingsViewModel
-
+    private let nameLabel = UILabel()
+    private let ageLabel = UILabel()
+    private let profileImageView = UIImageView()
+    private var videoView : AVPlayer? = nil
+    
     init(viewModel: SettingsViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -22,6 +27,19 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        title = "Settings"
     }
+    
+    private func setupViews() {
+        title = "Settings"
+        
+        view.addSubview(nameLabel)
+        view.addSubview(ageLabel)
+        view.addSubview(profileImageView)
+        
+        nameLabel.textAlignment = .left
+        ageLabel.textAlignment = .left
+        
+        
+    }
+    
 }

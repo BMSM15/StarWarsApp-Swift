@@ -4,7 +4,7 @@ protocol ViewControllerDelegate: AnyObject {
     func viewController(_ viewController: UIViewController, needsOpenDetailsForCharacter person: Person)
 }
 
-class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchResultsUpdating, UITabBarController {
+class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -31,7 +31,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         setupSearchController()
         setupCollectionView()
         setupActivityIndicator()
-        setupTabBarController()
         viewModel.onDataChanged = { [weak self] _ in
             DispatchQueue.main.async {
                 self?.refreshControl.endRefreshing()
@@ -80,15 +79,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         collectionView.pinBottom(to: view)
         collectionView.pinLeading(to: view)
         collectionView.pinTrailing(to: view)
-    }
-    
-    private func setupTabBarController() {
-        let settingsViewModel = SettingsViewModel()
-        let settingsViewController = SettingsViewController(viewModel: settingsViewModel)
-        self.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 0)
-        settingsViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .more, tag: 1)
-        
-
     }
     
     private func setupSearchController() {
@@ -154,36 +144,18 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let contentHeight = scrollView.contentSize.height
         let height = scrollView.frame.size.height
         
-        if offsetY > contentHeight - height - 200 {
-            if viewModel.isSearching {
-                if viewModel.loadState.isNextPage {
-                    viewModel.searchTextDidChange(to: viewModel.searchText)
-                }
-            } else if viewModel.canLoadMore {
-                viewModel.loadData()
-            }
+        if offsetY > contentHeight - height - 200,
+           viewModel.canLoadMore {
+            viewModel.loadData()
         }
     }
+}
 
+// MARK: - UISearchResultsUpdating
+
+extension ViewController: UISearchResultsUpdating {
+    
     func updateSearchResults(for searchController: UISearchController) {
-        viewModel.searchText = searchController.searchBar.text
-    }
-    
-}
-
-extension ViewController: UISearchBarDelegate {
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        // Perform the search when the user presses "Search" or "Enter"
-        viewModel.searchText = searchBar.text
-        searchBar.resignFirstResponder() // Dismiss the keyboard
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        // Handle the cancel button if needed
-        viewModel.searchText = nil
-        searchBar.text = nil
-        searchBar.resignFirstResponder() // Dismiss the keyboard
+        viewModel.search(text: searchController.searchBar.text)
     }
 }
-
-

@@ -13,43 +13,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     let services: Services = .init()
-    let navigationController = UINavigationController()
-    
+    let tabBarController = TabBarController()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
         window = UIWindow(frame: UIScreen.main.bounds)
         
-        // Cria a ViewController inicial
-        let viewModel = ViewModel(services: services)
-        let mainViewController = ViewController(viewModel: viewModel) // Substitua pelo nome da sua ViewController
-        mainViewController.delegate = self
-        navigationController.setViewControllers([mainViewController], animated: true)
-                
-        // Define o NavigationController como o rootViewController da janela
-        window?.rootViewController = navigationController
+        window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
 
         return true
     }
-}
-
-// MARK: - ViewControllerDelegate
-
-extension AppDelegate: ViewControllerDelegate {
-    
-    func viewController(_ viewController: UIViewController, needsOpenDetailsForCharacter person: Person) {
-        let detailsViewModel = DetailsViewModel(person: person, services: services)
-        let detailsViewController = DetailsViewController(viewModel: detailsViewModel)
-        detailsViewController.delegate = self
-        self.navigationController.pushViewController(detailsViewController, animated: true)
-    }
-}
-
-extension AppDelegate : DetailsViewControllerDelegate {
-    
-    func goBackToViewController() {
-        self.navigationController.popViewController(animated: true)
-    }
-
 }

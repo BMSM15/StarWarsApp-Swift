@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA2DB6E72C5A284200BC2E26 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2DB6E62C5A284200BC2E26 /* TabBarController.swift */; };
+		AA2DB6E92C5A73A400BC2E26 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2DB6E82C5A73A400BC2E26 /* User.swift */; };
 		AA3644DA2C528E3B0096A146 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3644D92C528E3B0096A146 /* Button.swift */; };
 		AA384FFD2C59429A001A46F7 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA384FFC2C59429A001A46F7 /* SettingsViewController.swift */; };
 		AA384FFF2C5942A8001A46F7 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA384FFE2C5942A8001A46F7 /* SettingsViewModel.swift */; };
@@ -49,6 +51,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AA2DB6E62C5A284200BC2E26 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		AA2DB6E82C5A73A400BC2E26 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		AA3644D92C528E3B0096A146 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		AA384FFC2C59429A001A46F7 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		AA384FFE2C5942A8001A46F7 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
@@ -127,6 +131,7 @@
 				AA3E96062C4914EC00080279 /* Person.swift */,
 				AA3E96082C49150100080279 /* Species.swift */,
 				AA3E96022C4911A500080279 /* CharacterDetails.swift */,
+				AA2DB6E82C5A73A400BC2E26 /* User.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -192,13 +197,14 @@
 			isa = PBXGroup;
 			children = (
 				AA3B26EF2C57EEAF008D5900 /* profile.json */,
-				AA384FFB2C59427D001A46F7 /* Settings */,
-				AA3644D82C528E1C0096A146 /* Component */,
-				AA4366C32C4800C800712862 /* Application */,
-				AA43F9B82C5116D600665B1F /* Error */,
 				AA3E960A2C49151100080279 /* Data */,
+				AA43F9B82C5116D600665B1F /* Error */,
+				AA4366C32C4800C800712862 /* Application */,
+				AA3644D82C528E1C0096A146 /* Component */,
+				AA384FFB2C59427D001A46F7 /* Settings */,
 				AA4366C72C4801A000712862 /* Details */,
 				AA4366C62C48017400712862 /* Home */,
+				AA2DB6E62C5A284200BC2E26 /* TabBarController.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -363,11 +369,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA43668F2C47E1CF00712862 /* ViewController.swift in Sources */,
+				AA2DB6E72C5A284200BC2E26 /* TabBarController.swift in Sources */,
 				AA43F9BA2C5116F600665B1F /* ErrorViewController.swift in Sources */,
 				AA43668B2C47E1CF00712862 /* AppDelegate.swift in Sources */,
 				AA3E96012C49026900080279 /* GetData.swift in Sources */,
 				AA4366BD2C47F65A00712862 /* DetailsViewModel.swift in Sources */,
 				AA384FFF2C5942A8001A46F7 /* SettingsViewModel.swift in Sources */,
+				AA2DB6E92C5A73A400BC2E26 /* User.swift in Sources */,
 				AA3E96092C49150100080279 /* Species.swift in Sources */,
 				AA3E96072C4914EC00080279 /* Person.swift in Sources */,
 				AA4366BB2C47F50A00712862 /* DetailsViewController.swift in Sources */,

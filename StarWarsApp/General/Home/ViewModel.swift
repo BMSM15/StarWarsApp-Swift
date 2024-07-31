@@ -1,9 +1,9 @@
 import Foundation
 
-enum LoadState {
-    case nextPage(Int)
-    case loadingPage(Int)
-    case hasAllResults
+enum LoadState: Equatable {
+    case nextPage(Int, searchText: String?)
+    case loadingPage(Int, searchText: String?)
+    case hasAllResults(searchText: String?)
     
     var isNextPage: Bool {
         if case .nextPage = self { return true }
@@ -19,29 +19,40 @@ enum LoadState {
         if case .hasAllResults = self { return true }
         return false
     }
+    
+    var searchText: String? {
+        switch self {
+        case let .nextPage(_, searchText),
+            let .loadingPage(_, searchText),
+            let .hasAllResults(searchText):
+            return searchText
+        }
+    }
+    
+    static func ==(lhs: LoadState, rhs: LoadState) -> Bool {
+        switch (lhs, rhs) {
+        case (let .nextPage(lPage, lSearchText), let .nextPage(rPage, rSearchText)):
+            return (lPage == rPage) && (lSearchText == rSearchText)
+        case (let .loadingPage(lPage, lSearchText), let .loadingPage(rPage, rSearchText)):
+            return (lPage == rPage) && (lSearchText == rSearchText)
+        case (let .hasAllResults(lSearchText), let .hasAllResults(rSearchText)):
+            return (lSearchText == rSearchText)
+        default:
+            return false
+        }
+    }
 }
 
 class ViewModel {
     
     private enum Constants {
-        static let initialLoadState: LoadState = .nextPage(1)
+        static let initialLoadState: LoadState = .nextPage(1, searchText: nil)
     }
     
-    var people: [Person] {
-        return isSearching ? searchedPeople : loadedPeople
-    }
+    var people: [Person] = []
     
     var loadState: LoadState = Constants.initialLoadState
     private let services: Services
-    private var loadedPeople: [Person] = []
-    var searchedPeople: [Person] = []
-    private(set) var isSearching: Bool = false
-    var searchText: String? {
-        didSet {
-            searchTextDidChange(to: searchText)
-        }
-    }
-    
     var onWillLoadData: (() -> ())?
     var onDataChanged: ((Bool) -> ())?
     
@@ -50,20 +61,21 @@ class ViewModel {
     }
     
     var canLoadMore: Bool {
-        return loadState.isNextPage && !isSearching
+        return loadState.isNextPage
     }
     
     var canRefresh: Bool {
-        return isSearching && people.isEmpty && !loadState.isLoadingPage
+        return people.isEmpty && !loadState.isLoadingPage
     }
-    
+        
     func loadData() {
-        guard case let .nextPage(page) = loadState else {
+        guard case let .nextPage(page, searchText) = loadState else {
             onDataChanged?(false)
             return
         }
         
-        loadState = .loadingPage(page)
+        loadState = .loadingPage(page, searchText: searchText)
+        
         onWillLoadData?()
         
         services.getCharacters(searchText: searchText, pageNumber: page) { [weak self] result in
@@ -72,78 +84,36 @@ class ViewModel {
             switch result {
             case .success(let response):
                 if page == 1 {
-                    self.loadedPeople = response.results
+                    self.people = response.results
                 } else {
-                    self.loadedPeople.append(contentsOf: response.results)
+                    self.people.append(contentsOf: response.results)
                 }
                 
-                if response.results.count < response.count {
-                    self.loadState = .nextPage(page + 1)
+                print("💡 \(self.people.count) \(response.count)")
+                if self.people.count < response.count {
+                    self.loadState = .nextPage(page + 1, searchText: searchText)
                 } else {
-                    self.loadState = .hasAllResults
+                    self.loadState = .hasAllResults(searchText: searchText)
                 }
                 self.onDataChanged?(true)
             case .failure(let error):
                 print("Failed to fetch people: \(error.localizedDescription)")
-                self.loadState = .nextPage(page) // Keep the current page
+                self.loadState = .nextPage(page, searchText: searchText) // Keep the current page
                 self.onDataChanged?(false)
             }
         }
     }
     
+    func search(text: String?) {
+        guard text != loadState.searchText else {
+            return
+        }
+        loadState = .nextPage(1, searchText: text)
+        loadData()
+    }
+
     func reloadData() {
         loadState = Constants.initialLoadState
         loadData()
     }
-    
-    
-    func searchTextDidChange(to searchText: String?) {
-        guard let searchText = searchText?.lowercased(), !searchText.isEmpty else {
-            isSearching = false
-            searchedPeople = []
-            loadState = .nextPage(1)
-            onDataChanged?(true)
-            return
-        }
-        
-        guard case let .nextPage(page) = loadState else {
-            onDataChanged?(false)
-            return
-        }
-        
-        loadState = .loadingPage(page)
-        onWillLoadData?()
-        isSearching = true
-        
-        services.getCharacters(searchText: searchText, pageNumber: page) { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let response):
-                if page == 1 {
-                    self.searchedPeople = response.results
-                } else {
-                    self.searchedPeople.append(contentsOf: response.results)
-                }
-                
-                if response.results.count + self.searchedPeople.count < response.count {
-                    self.loadState = .nextPage(page + 1)
-                } else {
-                    self.loadState = .hasAllResults
-                }
-                self.onDataChanged?(true)
-            case .failure(let error):
-                print("Failed to fetch people: \(error.localizedDescription)")
-                
-                if page == 1 {
-                    self.loadState = .nextPage(1)
-                } else {
-                    self.loadState = .nextPage(page)
-                }
-                self.onDataChanged?(false)
-            }
-        }
-    }
-    
 }
-

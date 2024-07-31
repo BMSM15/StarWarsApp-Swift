@@ -241,14 +241,6 @@ extension UIImageView {
     }
 }
 
-//extension DetailsViewController : ErrorViewControllerDelegate {
-//    
-//    func errorViewControllerDidTapReloadButton(_ viewController: UIViewController) {
-//        loadCharacterDetails()
-//        hideErrorView()
-//    }
-//}
-
 extension UIViewController {
     
     func add(_ child: UIViewController, frame: CGRect? = nil) {
