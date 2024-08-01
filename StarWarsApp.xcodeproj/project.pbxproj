@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		AA2DB6E72C5A284200BC2E26 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2DB6E62C5A284200BC2E26 /* TabBarController.swift */; };
 		AA2DB6E92C5A73A400BC2E26 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2DB6E82C5A73A400BC2E26 /* User.swift */; };
+		AA3058F92C5BC89F00E56918 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3058F82C5BC89F00E56918 /* WebViewController.swift */; };
 		AA3644DA2C528E3B0096A146 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3644D92C528E3B0096A146 /* Button.swift */; };
 		AA384FFD2C59429A001A46F7 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA384FFC2C59429A001A46F7 /* SettingsViewController.swift */; };
 		AA384FFF2C5942A8001A46F7 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA384FFE2C5942A8001A46F7 /* SettingsViewModel.swift */; };
@@ -53,6 +54,7 @@
 /* Begin PBXFileReference section */
 		AA2DB6E62C5A284200BC2E26 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		AA2DB6E82C5A73A400BC2E26 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		AA3058F82C5BC89F00E56918 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		AA3644D92C528E3B0096A146 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		AA384FFC2C59429A001A46F7 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		AA384FFE2C5942A8001A46F7 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 		AA384FFB2C59427D001A46F7 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				AA3058F82C5BC89F00E56918 /* WebViewController.swift */,
 				AA384FFC2C59429A001A46F7 /* SettingsViewController.swift */,
 				AA384FFE2C5942A8001A46F7 /* SettingsViewModel.swift */,
 			);
@@ -126,6 +129,7 @@
 		AA3E960A2C49151100080279 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				AA3B26EF2C57EEAF008D5900 /* profile.json */,
 				AA3E96002C49026900080279 /* GetData.swift */,
 				AA3E96042C49141E00080279 /* Vehicle.swift */,
 				AA3E96062C4914EC00080279 /* Person.swift */,
@@ -196,7 +200,6 @@
 		AA4366C42C48010500712862 /* General */ = {
 			isa = PBXGroup;
 			children = (
-				AA3B26EF2C57EEAF008D5900 /* profile.json */,
 				AA3E960A2C49151100080279 /* Data */,
 				AA43F9B82C5116D600665B1F /* Error */,
 				AA4366C32C4800C800712862 /* Application */,
@@ -369,6 +372,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA43668F2C47E1CF00712862 /* ViewController.swift in Sources */,
+				AA3058F92C5BC89F00E56918 /* WebViewController.swift in Sources */,
 				AA2DB6E72C5A284200BC2E26 /* TabBarController.swift in Sources */,
 				AA43F9BA2C5116F600665B1F /* ErrorViewController.swift in Sources */,
 				AA43668B2C47E1CF00712862 /* AppDelegate.swift in Sources */,
