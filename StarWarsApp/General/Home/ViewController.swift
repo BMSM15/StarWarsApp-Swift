@@ -1,7 +1,7 @@
 import UIKit
 
 protocol ViewControllerDelegate: AnyObject {
-    func viewController(_ viewController: UIViewController, needsOpenDetailsForCharacter person: Person)
+    func viewController(_ viewController: ViewController, needsOpenDetailsForCharacter person: Person)
 }
 
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {

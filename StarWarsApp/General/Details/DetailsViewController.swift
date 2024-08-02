@@ -1,7 +1,7 @@
 import UIKit
 
 protocol DetailsViewControllerDelegate: AnyObject {
-    func goBackToViewController()
+    func detailsViewControllerNeedsToGoBack()
 }
 
 class DetailsViewController: UIViewController {
@@ -35,7 +35,7 @@ class DetailsViewController: UIViewController {
             self?.hideErrorView()
         }
         errorViewController.goBackButtonHandler = { [weak self] in
-            self?.delegate?.goBackToViewController()
+            self?.delegate?.detailsViewControllerNeedsToGoBack()
         }
     }
     

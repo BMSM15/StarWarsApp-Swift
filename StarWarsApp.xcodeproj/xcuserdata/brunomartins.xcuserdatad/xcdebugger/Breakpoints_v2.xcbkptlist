@@ -3,4 +3,373 @@
    uuid = "3F99D43A-539F-42B0-B1CF-A5F3C2BD8D6A"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "646C2AC4-3284-4950-A5D4-15D04825F08B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "StarWarsApp/General/TabBarController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
+            landmarkName = "unknown"
+            landmarkType = "0">
+            <Locations>
+               <Location
+                  uuid = "646C2AC4-3284-4950-A5D4-15D04825F08B - c947665d1871d69e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "StarWarsApp.TabBarController.intSettingsviewController(__C.UIViewController, Foundation.URL) -&gt; ()"
+                  moduleName = "StarWarsApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/brunomartins/Documents/iosProjects/StarWarsApp/StarWarsApp/General/TabBarController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "69"
+                  endingLineNumber = "69"
+                  offsetFromSymbolStart = "216">
+               </Location>
+               <Location
+                  uuid = "646C2AC4-3284-4950-A5D4-15D04825F08B - c947665d1871d69e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "StarWarsApp.TabBarController.intSettingsviewController(__C.UIViewController, Foundation.URL) -&gt; ()"
+                  moduleName = "StarWarsApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/brunomartins/Documents/iosProjects/StarWarsApp/StarWarsApp/General/TabBarController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "69"
+                  endingLineNumber = "69"
+                  offsetFromSymbolStart = "225">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "475C42D8-3AD5-4622-977C-2F30241F7D1D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "StarWarsApp/General/Details/DetailsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
+            landmarkName = "setupActions()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7356D1EC-36BC-464A-8D85-F8EBE9304E86"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "StarWarsApp/General/Home/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "137"
+            endingLineNumber = "137"
+            landmarkName = "collectionView(_:didSelectItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "47D3CE1A-8A35-4284-AEB2-EB72F0A0A053"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "StarWarsApp/General/TabBarController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "settingsviewController(_:needsToOpenLink:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4D214EEA-68E7-4C8A-A1F8-7964F635D1CF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "StarWarsApp/General/TabBarController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "74"
+            endingLineNumber = "74"
+            landmarkName = "settingsviewController(_:needsToOpenLink:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DEC15F5A-799E-4962-A853-0927CC564F62"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "StarWarsApp/General/TabBarController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "73"
+            endingLineNumber = "73"
+            landmarkName = "settingsviewController(_:needsToOpenLink:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "DEC15F5A-799E-4962-A853-0927CC564F62 - 1a11ea3206c153f1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "StarWarsApp.TabBarController.settingsviewController(_: StarWarsApp.SettingsViewController, needsToOpenLink: StarWarsApp.Link) -&gt; ()"
+                  moduleName = "StarWarsApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/brunomartins/Documents/iosProjects/StarWarsApp/StarWarsApp/General/TabBarController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "73"
+                  endingLineNumber = "73"
+                  offsetFromSymbolStart = "1006">
+               </Location>
+               <Location
+                  uuid = "DEC15F5A-799E-4962-A853-0927CC564F62 - 1a11ea3206c153f1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "StarWarsApp.TabBarController.settingsviewController(_: StarWarsApp.SettingsViewController, needsToOpenLink: StarWarsApp.Link) -&gt; ()"
+                  moduleName = "StarWarsApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/brunomartins/Documents/iosProjects/StarWarsApp/StarWarsApp/General/TabBarController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "73"
+                  endingLineNumber = "73"
+                  offsetFromSymbolStart = "1013">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0AEBE66F-0702-4483-B706-107CBE0E6349"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "StarWarsApp/General/TabBarController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "75"
+            endingLineNumber = "75"
+            landmarkName = "settingsviewController(_:needsToOpenLink:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "0AEBE66F-0702-4483-B706-107CBE0E6349 - 1a11ea3206c153b3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "StarWarsApp.TabBarController.settingsviewController(_: StarWarsApp.SettingsViewController, needsToOpenLink: StarWarsApp.Link) -&gt; ()"
+                  moduleName = "StarWarsApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/brunomartins/Documents/iosProjects/StarWarsApp/StarWarsApp/General/TabBarController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "75"
+                  endingLineNumber = "75"
+                  offsetFromSymbolStart = "1270">
+               </Location>
+               <Location
+                  uuid = "0AEBE66F-0702-4483-B706-107CBE0E6349 - 1a11ea3206c153b3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "StarWarsApp.TabBarController.settingsviewController(_: StarWarsApp.SettingsViewController, needsToOpenLink: StarWarsApp.Link) -&gt; ()"
+                  moduleName = "StarWarsApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/brunomartins/Documents/iosProjects/StarWarsApp/StarWarsApp/General/TabBarController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "75"
+                  endingLineNumber = "75"
+                  offsetFromSymbolStart = "1222">
+               </Location>
+               <Location
+                  uuid = "0AEBE66F-0702-4483-B706-107CBE0E6349 - 1a11ea3206c153b3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "StarWarsApp.TabBarController.settingsviewController(_: StarWarsApp.SettingsViewController, needsToOpenLink: StarWarsApp.Link) -&gt; ()"
+                  moduleName = "StarWarsApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/brunomartins/Documents/iosProjects/StarWarsApp/StarWarsApp/General/TabBarController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "75"
+                  endingLineNumber = "75"
+                  offsetFromSymbolStart = "1226">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AA34B85E-6BFB-42AB-8CEF-2A5F50AA4FBA"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "StarWarsApp/General/WebViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
+            landmarkName = "webView(_:didFail:withError:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FC3A90DA-DC51-411C-89A7-A57B6F461FD0"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "StarWarsApp/General/WebViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "47"
+            endingLineNumber = "47"
+            landmarkName = "webView(_:didFailProvisionalNavigation:withError:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3D23DBD6-61E0-43B3-8F8C-A6580BC7C183"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "StarWarsApp/General/WebViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "31"
+            endingLineNumber = "31"
+            landmarkName = "webView(_:didFailLoadWithError:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "3D23DBD6-61E0-43B3-8F8C-A6580BC7C183 - e8b874b197cc3ba9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "StarWarsApp.WebViewController.webView(_: __C.WKWebView, didFail: Swift.Optional&lt;__C.WKNavigation&gt;, withError: Swift.Error) -&gt; ()"
+                  moduleName = "StarWarsApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/brunomartins/Documents/iosProjects/StarWarsApp/StarWarsApp/General/WebViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "31"
+                  endingLineNumber = "31"
+                  offsetFromSymbolStart = "56">
+               </Location>
+               <Location
+                  uuid = "3D23DBD6-61E0-43B3-8F8C-A6580BC7C183 - 29241ece63c11367"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "StarWarsApp.WebViewController.webView(_: __C.UIWebView, didFailLoadWithError: Swift.Error) -&gt; ()"
+                  moduleName = "StarWarsApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/brunomartins/Documents/iosProjects/StarWarsApp/StarWarsApp/General/WebViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "31"
+                  endingLineNumber = "31"
+                  offsetFromSymbolStart = "163">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3C27F1CF-2D6B-424B-93F9-D596FFD5C983"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "StarWarsApp/General/WebViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
+            landmarkName = "presentErrorViewController()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9D5ACD28-7905-4EAE-B3B6-08D551D9DF9E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "StarWarsApp/General/WebViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "9D5ACD28-7905-4EAE-B3B6-08D551D9DF9E - c4fd3e59b5c1c8f1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "StarWarsApp.WebViewController.viewDidLoad() -&gt; ()"
+                  moduleName = "StarWarsApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/brunomartins/Documents/iosProjects/StarWarsApp/StarWarsApp/General/WebViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "28"
+                  endingLineNumber = "28"
+                  offsetFromSymbolStart = "314">
+               </Location>
+               <Location
+                  uuid = "9D5ACD28-7905-4EAE-B3B6-08D551D9DF9E - c4fd3e59b5c1c890"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "StarWarsApp.WebViewController.viewDidLoad() -&gt; ()"
+                  moduleName = "StarWarsApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/brunomartins/Documents/iosProjects/StarWarsApp/StarWarsApp/General/WebViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "27"
+                  endingLineNumber = "27"
+                  offsetFromSymbolStart = "314">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

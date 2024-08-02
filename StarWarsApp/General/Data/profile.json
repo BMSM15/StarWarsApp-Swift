@@ -14,15 +14,15 @@
             "url": "https://www.recordZZZZZZZ.pt/",
             "openMode": "INTERNAL"
         },
-		{
-			"title": "Google",
-			"url": "https://www.google.com/",
-            "openMode": "MODAL"
-		},
+        {
+            "title": "Googlez",
+            "url": "https://www.google.com/",
+            "openMode": "EXTERNAL"
+        },
         {
             "title": "Google",
             "url": "https://www.google.com/",
-            "openMode": "EXTERNAL"
+            "openMode": "MODAL"
         }
 	]
 }

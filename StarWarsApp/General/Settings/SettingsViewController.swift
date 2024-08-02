@@ -2,7 +2,11 @@ import UIKit
 import AVKit
 import WebKit
 
-class SettingsViewController: UIViewController, WKUIDelegate {
+protocol SettingsViewControllerDelegate: AnyObject {
+    func settingsviewController(_ viewController: SettingsViewController, needsToOpenLink link: Link)
+}
+
+class SettingsViewController: UIViewController {
     private let viewModel: SettingsViewModel
     private let nameLabel = UILabel()
     private let ageLabel = UILabel()
@@ -12,7 +16,11 @@ class SettingsViewController: UIViewController, WKUIDelegate {
     private var playerLayer: AVPlayerLayer!
     private var playerObserver: NSKeyValueObservation!
     private let videoContainerView = UIView()
+    private let activityIndicator = UIActivityIndicatorView(style: .large)
     var webView: WKWebView!
+    weak var delegate: SettingsViewControllerDelegate?
+    private let linksStackView = UIStackView()
+    
     
     init(viewModel: SettingsViewModel) {
         self.viewModel = viewModel
@@ -28,23 +36,8 @@ class SettingsViewController: UIViewController, WKUIDelegate {
         view.backgroundColor = .white
         setupViews()
         setupConstraints()
-        setupWebView()
-        updateUI()
+        loadSettings()
     }
-    
-    override func loadView() {
-        let webConfiguration = WKWebViewConfiguration()
-        webView = WKWebView(frame: .zero, configuration: webConfiguration)
-        webView.uiDelegate = self
-        view = webView
-    }
-    
-    private func setupWebView() {
-        //        let myURL = URL(string:"https://www.apple.com")
-        //        let myRequest = URLRequest(url: myURL!)
-        //        webView.load(myRequest)
-    }
-    
     
     private func setupViews() {
         title = "Settings"
@@ -53,6 +46,7 @@ class SettingsViewController: UIViewController, WKUIDelegate {
         view.addSubview(ageLabel)
         view.addSubview(profileImageView)
         view.addSubview(videoContainerView)
+        view.addSubview(linksStackView)
         
         nameLabel.textAlignment = .left
         ageLabel.textAlignment = .left
@@ -61,8 +55,13 @@ class SettingsViewController: UIViewController, WKUIDelegate {
         ageLabel.translatesAutoresizingMaskIntoConstraints = false
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         videoContainerView.translatesAutoresizingMaskIntoConstraints = false
+        linksStackView.translatesAutoresizingMaskIntoConstraints = false
         
         videoContainerView.backgroundColor = .black
+        linksStackView.axis = .vertical
+        linksStackView.spacing = 10
+        linksStackView.alignment = .fill
+        linksStackView.distribution = .equalSpacing
     }
     
     private func setupConstraints() {
@@ -81,13 +80,28 @@ class SettingsViewController: UIViewController, WKUIDelegate {
             videoContainerView.topAnchor.constraint(equalTo: ageLabel.bottomAnchor, constant: 20),
             videoContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             videoContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            videoContainerView.heightAnchor.constraint(equalTo: videoContainerView.widthAnchor, multiplier: 9.0/16.0)
+            videoContainerView.heightAnchor.constraint(equalTo: videoContainerView.widthAnchor, multiplier: 9.0/16.0),
+            
+            linksStackView.topAnchor.constraint(equalTo: videoContainerView.bottomAnchor, constant: 20),
+            linksStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            linksStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
         ])
         
         //        videoContainerView.pinTop(to: ageLabel, constant: 20)
         //        videoContainerView.pinLeading(to: view, constant: 10)
         //        videoContainerView.pinTrailing(to: view, constant: -10)
         //        videoContainerView.heightEqual(to: videoContainerView, multiplier: 9.0/16.0)
+        
+    }
+    
+    func loadSettings() {
+        activityIndicator.startAnimating()
+        self.viewModel.fetchSettings {
+            DispatchQueue.main.async {
+                self.updateUI()
+            }
+        }
+        activityIndicator.stopAnimating()
     }
     
     private func updateUI() {
@@ -118,6 +132,8 @@ class SettingsViewController: UIViewController, WKUIDelegate {
                                                selector: #selector(playerDidFinishPlaying(_:)),
                                                name: .AVPlayerItemDidPlayToEndTime,
                                                object: playerItem)
+        
+        setupLinkButtons(links: user.links)
     }
     
     override func viewDidLayoutSubviews() {
@@ -143,32 +159,22 @@ class SettingsViewController: UIViewController, WKUIDelegate {
         NotificationCenter.default.removeObserver(self)
     }
     
-//    private func handleLinkTap(_ link: Links) {
-//        guard let url = URL(string: link.url) else { return }
-//        
-//        switch link.openMode {
-//        case .internal:
-//            openInternalWebView(with: url)
-//        case .modal:
-//            openModalWebView(with: url)
-//        case .external:
-//            openExternalWebView(with: url)
-//        }
-//    }
-//    
-//    private func openInternalWebView(with url: URL) {
-//        let webViewController = WebViewController(url: url)
-//        navigationController?.pushViewController(webViewController, animated: true)
-//    }
-//    
-//    private func openModalWebView(with url: URL) {
-//        let webViewController = WebViewController(url: url)
-//        let navController = UINavigationController(rootViewController: webViewController)
-//        present(navController, animated: true, completion: nil)
-//    }
-//    
-//    private func openExternalWebView(with url: URL) {
-//        UIApplication.shared.open(url)
-//    }
+    private func setupLinkButtons(links: [Link]) {
+        linksStackView.arrangedSubviews.forEach { $0.removeFromSuperview() } // Clear previous buttons
+        for (index, link) in links.enumerated() {
+            let button = UIButton(type: .system)
+            button.setTitle(link.title, for: .normal)
+            button.tag = index
+            button.addTarget(self, action: #selector(linkButtonTapped(_:)), for: .touchUpInside)
+            linksStackView.addArrangedSubview(button)
+        }
+    }
+    
+    @objc private func linkButtonTapped(_ sender: UIButton) {
+        guard let user = viewModel.user else { return }
+        let link = user.links[sender.tag]
+        //handleLinkTap(link)
+        delegate?.settingsviewController(self, needsToOpenLink: link)
+    }
 }
 

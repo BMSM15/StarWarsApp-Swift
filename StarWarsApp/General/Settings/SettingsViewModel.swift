@@ -10,11 +10,7 @@ import Foundation
 class SettingsViewModel {
     var user: User?
     
-    init() {
-        loadProfile()
-    }
-    
-    private func loadProfile() {
+    func fetchSettings(completion: @escaping () -> Void) {
         guard let url = Bundle.main.url(forResource: "profile", withExtension: "json") else {
             print("Failed to locate profile.json in bundle.")
             return
@@ -23,10 +19,11 @@ class SettingsViewModel {
         do {
             let data = try Data(contentsOf: url)
             let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .formatted(DateFormatter.shortDate)
+            
             self.user = try decoder.decode(User.self, from: data)
+            completion()
         } catch {
-            print("Failed to decode profile.json: \(error)")
+            print("Failed to decode profile.json: \(error.localizedDescription)")
         }
     }
     

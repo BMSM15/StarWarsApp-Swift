@@ -14,6 +14,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     let homeNavController = UINavigationController()
     let settingsNavController = UINavigationController()
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupTabs()
@@ -28,14 +29,11 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         let settingsViewModel = SettingsViewModel()
         let settingsViewController = SettingsViewController(viewModel: settingsViewModel)
         
-        
+        settingsViewController.delegate = self
         viewController.delegate = self
-                
+        
         self.configureNavigationController(homeNavController, title: "Home", image: UIImage(systemName: "house"), viewController: viewController)
         self.configureNavigationController(settingsNavController, title: "Settings", image: UIImage(systemName: "person"), viewController: settingsViewController)
-        
-       // let settings = self.createNav(with: "Settings", and: UIImage(systemName: "person"), vc: SettingsViewController(viewModel: settingsViewModel))
-        
         self.setViewControllers([homeNavController, settingsNavController], animated: true)
     }
     
@@ -47,8 +45,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
 }
 
 extension TabBarController: ViewControllerDelegate {
-    
-    func viewController(_ viewController: UIViewController, needsOpenDetailsForCharacter person: Person) {
+    func viewController(_ viewController: ViewController, needsOpenDetailsForCharacter person: Person) {
         print("needsOpenDetailsForCharacter")
         let detailsViewModel = DetailsViewModel(person: person, services: services)
         let detailsViewController = DetailsViewController(viewModel: detailsViewModel)
@@ -59,7 +56,40 @@ extension TabBarController: ViewControllerDelegate {
 }
 
 extension TabBarController: DetailsViewControllerDelegate {
-    func goBackToViewController() {
+    func detailsViewControllerNeedsToGoBack() {
         homeNavController.popViewController(animated: true)
     }
 }
+
+extension TabBarController : SettingsViewControllerDelegate {
+    func settingsviewController(_ viewController: SettingsViewController, needsToOpenLink link: Link) {
+        let url = URL(string: link.url)
+        let webViewModel = WebViewModel(url: url!)
+        let webViewController = WebViewController(viewModel: webViewModel)
+        switch link.openMode {
+        case "INTERNAL":
+            settingsNavController.pushViewController(webViewController, animated: true)
+        case "MODAL":
+            present(webViewController, animated: true, completion: nil)
+        case "EXTERNAL":
+            UIApplication.shared.open(url!)
+        default:
+            return
+        }
+    }
+}
+    
+    
+    //    func intSettingsviewController(_ viewController: UIViewController,_ url: URL) {
+    //        let webViewModel = WebViewModel(url: url)
+    //        let webViewController = WebViewController(viewModel: webViewModel)
+    //        settingsNavController.pushViewController(webViewController, animated: true)
+    //    }
+    //
+    //    func modSettingsviewController(_ viewController: UIViewController, _ url: URL) {
+    //        let webViewModel = WebViewModel(url: url)
+    //        let webViewController = WebViewController(viewModel: webViewModel)
+    //        webNavController.setViewControllers([webViewController], animated: false)
+    //        present(webNavController, animated: true, completion: nil)
+    //    }
+    

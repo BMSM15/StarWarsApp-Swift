@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		AA2DB6E72C5A284200BC2E26 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2DB6E62C5A284200BC2E26 /* TabBarController.swift */; };
 		AA2DB6E92C5A73A400BC2E26 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2DB6E82C5A73A400BC2E26 /* User.swift */; };
-		AA3058F92C5BC89F00E56918 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3058F82C5BC89F00E56918 /* WebViewController.swift */; };
+		AA30423C2C5CCBAE005BD0D2 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA30423B2C5CCBAE005BD0D2 /* WebViewController.swift */; };
+		AA30423E2C5CD041005BD0D2 /* WebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA30423D2C5CD041005BD0D2 /* WebViewModel.swift */; };
 		AA3644DA2C528E3B0096A146 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3644D92C528E3B0096A146 /* Button.swift */; };
 		AA384FFD2C59429A001A46F7 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA384FFC2C59429A001A46F7 /* SettingsViewController.swift */; };
 		AA384FFF2C5942A8001A46F7 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA384FFE2C5942A8001A46F7 /* SettingsViewModel.swift */; };
@@ -54,7 +55,8 @@
 /* Begin PBXFileReference section */
 		AA2DB6E62C5A284200BC2E26 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		AA2DB6E82C5A73A400BC2E26 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		AA3058F82C5BC89F00E56918 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		AA30423B2C5CCBAE005BD0D2 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		AA30423D2C5CD041005BD0D2 /* WebViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewModel.swift; sourceTree = "<group>"; };
 		AA3644D92C528E3B0096A146 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		AA384FFC2C59429A001A46F7 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		AA384FFE2C5942A8001A46F7 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
@@ -119,7 +121,6 @@
 		AA384FFB2C59427D001A46F7 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				AA3058F82C5BC89F00E56918 /* WebViewController.swift */,
 				AA384FFC2C59429A001A46F7 /* SettingsViewController.swift */,
 				AA384FFE2C5942A8001A46F7 /* SettingsViewModel.swift */,
 			);
@@ -208,6 +209,8 @@
 				AA4366C72C4801A000712862 /* Details */,
 				AA4366C62C48017400712862 /* Home */,
 				AA2DB6E62C5A284200BC2E26 /* TabBarController.swift */,
+				AA30423B2C5CCBAE005BD0D2 /* WebViewController.swift */,
+				AA30423D2C5CD041005BD0D2 /* WebViewModel.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -372,7 +375,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA43668F2C47E1CF00712862 /* ViewController.swift in Sources */,
-				AA3058F92C5BC89F00E56918 /* WebViewController.swift in Sources */,
 				AA2DB6E72C5A284200BC2E26 /* TabBarController.swift in Sources */,
 				AA43F9BA2C5116F600665B1F /* ErrorViewController.swift in Sources */,
 				AA43668B2C47E1CF00712862 /* AppDelegate.swift in Sources */,
@@ -380,9 +382,11 @@
 				AA4366BD2C47F65A00712862 /* DetailsViewModel.swift in Sources */,
 				AA384FFF2C5942A8001A46F7 /* SettingsViewModel.swift in Sources */,
 				AA2DB6E92C5A73A400BC2E26 /* User.swift in Sources */,
+				AA30423E2C5CD041005BD0D2 /* WebViewModel.swift in Sources */,
 				AA3E96092C49150100080279 /* Species.swift in Sources */,
 				AA3E96072C4914EC00080279 /* Person.swift in Sources */,
 				AA4366BB2C47F50A00712862 /* DetailsViewController.swift in Sources */,
+				AA30423C2C5CCBAE005BD0D2 /* WebViewController.swift in Sources */,
 				AA3644DA2C528E3B0096A146 /* Button.swift in Sources */,
 				AA384FFD2C59429A001A46F7 /* SettingsViewController.swift in Sources */,
 				AA4366BF2C47F68C00712862 /* ViewModel.swift in Sources */,
