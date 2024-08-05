@@ -40,8 +40,6 @@ class DetailsViewController: UIViewController {
     }
     
     func showErrorView() {
-        //errorViewController.delegate = self
-        
         self.add(errorViewController)
     }
     
@@ -173,6 +171,12 @@ extension UIView {
     }
     
     @discardableResult
+    func heightEqualsToWidth(multiplier: CGFloat = 1) -> NSLayoutConstraint {
+        usesAutoLayout()
+        return heightAnchor.constraint(equalTo: widthAnchor, multiplier: multiplier).activate()
+    }
+    
+    @discardableResult
     func pinTopSafeArea(to view: UIView, constant: CGFloat = 0) -> NSLayoutConstraint {
         usesAutoLayout()
         return safeAreaLayoutGuide.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: constant).activate()
@@ -190,6 +194,19 @@ extension UIView {
         usesAutoLayout()
         return bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: constant).activate()
     }
+    
+    @discardableResult
+    func pinTopToBottom(to view: UIView, constant: CGFloat = 0) -> NSLayoutConstraint {
+        usesAutoLayout()
+        return topAnchor.constraint(equalTo: view.bottomAnchor, constant: constant).activate()
+    }
+    
+    @discardableResult
+    func pinSafeAreaBottom(to view: UIView, constant: CGFloat = 0) -> NSLayoutConstraint {
+        usesAutoLayout()
+        return bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -constant).activate()
+    }
+
     @discardableResult
     func pinLeading(to view: UIView, constant: CGFloat = 0) -> NSLayoutConstraint {
         usesAutoLayout()

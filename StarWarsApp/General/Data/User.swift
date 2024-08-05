@@ -18,5 +18,11 @@ struct User: Codable {
 struct Link: Codable {
     let title: String
     let url: String
-    let openMode: String
+    let openMode: LinkOpenMode
+}
+
+enum LinkOpenMode: String, Codable {
+    case `internal` = "INTERNAL"
+    case modal = "MODAL"
+    case external = "EXTERNAL"
 }

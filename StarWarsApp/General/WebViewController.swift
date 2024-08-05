@@ -1,9 +1,15 @@
 import UIKit
 import WebKit
 
-class WebViewController: UIViewController, WKUIDelegate {
+protocol WebViewControllerDelegate : AnyObject {
+    func webViewControllerNeedsToGoBack(_ viewController: WebViewController)
+}
+
+class WebViewController: UIViewController, WKNavigationDelegate {
     var webView: WKWebView!
     let viewModel: WebViewModel
+    weak var delegate: WebViewControllerDelegate?
+    
     
     init(viewModel: WebViewModel) {
         self.viewModel = viewModel
@@ -17,7 +23,7 @@ class WebViewController: UIViewController, WKUIDelegate {
     override func loadView() {
         let webConfiguration = WKWebViewConfiguration()
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
-        webView.uiDelegate = self
+        webView.navigationDelegate = self
         view = webView
     }
     
@@ -27,18 +33,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView.load(myRequest)
     }
     
-    func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
-        print("webview did fail load with error: \(error)")
-
-        let message: String = error.localizedDescription
-
-        let alert = UIAlertController(title: "something", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default) { action in
-        // use action here
-        })
-        self.present(alert, animated: true)
-    }
-    
+    // Handle error when navigation fails
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         presentErrorViewController()
     }
@@ -47,8 +42,32 @@ class WebViewController: UIViewController, WKUIDelegate {
         presentErrorViewController()
     }
     
+    // Present ErrorViewController when an error occursb
     private func presentErrorViewController() {
         let errorVC = ErrorViewController()
-        navigationController?.pushViewController(errorVC, animated: true)
+        errorVC.retryButtonHandler = { [weak self] in
+            self?.reloadWebView()
+            self?.removeErrorViewController()
+        }
+        errorVC.goBackButtonHandler = { [weak self] in
+            guard let self = self else {
+                return
+            }
+            self.delegate?.webViewControllerNeedsToGoBack(self)
+        }
+        add(errorVC)
+    }
+
+    private func reloadWebView() {
+        let myRequest = URLRequest(url: viewModel.url)
+        webView.load(myRequest)
+    }
+
+    private func removeErrorViewController() {
+        children.forEach { childVC in
+            if let errorVC = childVC as? ErrorViewController {
+                remove(errorVC)
+            }
+        }
     }
 }

@@ -61,11 +61,11 @@ class SettingsViewController: UIViewController {
         linksStackView.axis = .vertical
         linksStackView.spacing = 10
         linksStackView.alignment = .fill
-        linksStackView.distribution = .equalSpacing
+        linksStackView.distribution = .fill
     }
     
     private func setupConstraints() {
-        nameLabel.pinTop(to: profileImageView, constant: 200)
+        nameLabel.pinBottom(to: profileImageView, constant: 50)
         nameLabel.pinLeading(to: view, constant: 10)
         
         ageLabel.pinTop(to: nameLabel, constant: 30)
@@ -73,24 +73,17 @@ class SettingsViewController: UIViewController {
         
         profileImageView.pinTopSafeArea(to: view, constant: 10)
         profileImageView.centerHorizontally(to: view)
-        profileImageView.widthEqual(to: view, multiplier: 0.45)
-        profileImageView.heightEqual(to: view, multiplier: 0.20)
+        profileImageView.widthEqual(to: view, multiplier: 0.25)
+        profileImageView.heightEqual(to: view, multiplier: 0.10)
         
-        NSLayoutConstraint.activate([
-            videoContainerView.topAnchor.constraint(equalTo: ageLabel.bottomAnchor, constant: 20),
-            videoContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            videoContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            videoContainerView.heightAnchor.constraint(equalTo: videoContainerView.widthAnchor, multiplier: 9.0/16.0),
-            
-            linksStackView.topAnchor.constraint(equalTo: videoContainerView.bottomAnchor, constant: 20),
-            linksStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            linksStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-        ])
+        videoContainerView.pinTopSafeArea(to: ageLabel, constant: 35)
+        videoContainerView.pinLeading(to: view, constant: 10)
+        videoContainerView.pinTrailing(to: view, constant: 10)
+        videoContainerView.heightEqualsToWidth(multiplier: 9.0/16.0)
         
-        //        videoContainerView.pinTop(to: ageLabel, constant: 20)
-        //        videoContainerView.pinLeading(to: view, constant: 10)
-        //        videoContainerView.pinTrailing(to: view, constant: -10)
-        //        videoContainerView.heightEqual(to: videoContainerView, multiplier: 9.0/16.0)
+        linksStackView.pinTopToBottom(to: videoContainerView, constant: 10)
+        linksStackView.pinLeading(to: view, constant: 10)
+        linksStackView.pinTrailing(to: view, constant: 10)
         
     }
     
@@ -109,8 +102,8 @@ class SettingsViewController: UIViewController {
         
         nameLabel.text = "Name: \(user.name)"
         
-        let age = viewModel.calculateAge(from: user.birthdate)
-        ageLabel.text = "Age: \(age!)"
+        guard let age = viewModel.calculateAge(from: user.birthdate) else { return }
+        ageLabel.text = "Age: \(age)"
         
         if let imageUrl = URL(string: user.imageURL) {
             profileImageView.load(url: imageUrl)
@@ -160,10 +153,14 @@ class SettingsViewController: UIViewController {
     }
     
     private func setupLinkButtons(links: [Link]) {
-        linksStackView.arrangedSubviews.forEach { $0.removeFromSuperview() } // Clear previous buttons
+        linksStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         for (index, link) in links.enumerated() {
             let button = UIButton(type: .system)
             button.setTitle(link.title, for: .normal)
+            button.setTitleColor(.white, for:.normal)
+            button.backgroundColor = .gray
+            button.layer.cornerRadius = 10
+            button.layer.masksToBounds = true
             button.tag = index
             button.addTarget(self, action: #selector(linkButtonTapped(_:)), for: .touchUpInside)
             linksStackView.addArrangedSubview(button)
@@ -173,8 +170,9 @@ class SettingsViewController: UIViewController {
     @objc private func linkButtonTapped(_ sender: UIButton) {
         guard let user = viewModel.user else { return }
         let link = user.links[sender.tag]
-        //handleLinkTap(link)
         delegate?.settingsviewController(self, needsToOpenLink: link)
     }
+    
+    
 }
 

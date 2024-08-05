@@ -5,8 +5,8 @@
 	"videoURL": "https://videodelivery.net/e579b09022014f4be804adaa03650a04/manifest/video.m3u8",
 	"links": [
 		{
-			"title": "Record",
-			"url": "https://www.record.pt/",
+			"title": "GitHub",
+			"url": "https://github.com/BMSM15",
             "openMode": "INTERNAL"
 		},
         {
@@ -15,14 +15,19 @@
             "openMode": "INTERNAL"
         },
         {
-            "title": "Googlez",
-            "url": "https://www.google.com/",
+            "title": "Linkedin",
+            "url": "https://www.linkedin.com/in/bruno-martins-083321234/",
             "openMode": "EXTERNAL"
         },
         {
-            "title": "Google",
-            "url": "https://www.google.com/",
+            "title": "Prozis",
+            "url": "https://www.prozis.com/",
             "openMode": "MODAL"
+        },
+        {
+            "title": "URL inválido",
+            "url": "",
+            "openMode": "INTERNAL"
         }
 	]
 }

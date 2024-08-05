@@ -7,11 +7,6 @@
 
 import UIKit
 
-//protocol ErrorViewControllerDelegate: AnyObject {
-//    func errorViewControllerDidTapReloadButton(_ viewController: UIViewController)
-//}
-
-
 class ErrorViewController: UIViewController {
     private let errorLabel = UILabel()
     private let errorButton : Button
