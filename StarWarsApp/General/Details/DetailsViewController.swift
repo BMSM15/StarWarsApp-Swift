@@ -1,3 +1,11 @@
+//
+//  TabBarController.swift
+//  StarWarsApp
+//
+//  Created by Bruno Martins on 20/07/2024.
+//
+
+
 import UIKit
 
 protocol DetailsViewControllerDelegate: AnyObject {
@@ -99,7 +107,7 @@ class DetailsViewController: UIViewController {
     
     private func setupConstraints() {
         
-        principalStackView.pinTopSafeArea(to: view, constant: 10)
+        principalStackView.pinSafeAreaTop(to: view, constant: 10)
         principalStackView.pinBottom(to: view, constant: 10)
         principalStackView.pinTrailing(to: view, constant: 10)
         principalStackView.pinLeading(to: view, constant: 10)
@@ -140,132 +148,6 @@ class DetailsViewController: UIViewController {
     }
 }
 
-extension UIView {
-    
-    func usesAutoLayout() {
-        translatesAutoresizingMaskIntoConstraints = false
-    }
-    
-    @discardableResult
-    func centerHorizontally(to parentView: UIView, constant: CGFloat = 0) -> NSLayoutConstraint {
-        usesAutoLayout()
-        return centerXAnchor.constraint(equalTo: parentView.centerXAnchor, constant: constant).activate()
-    }
-    
-    @discardableResult
-    func centerVertically(to parentView: UIView, constant: CGFloat = 0) -> NSLayoutConstraint {
-        usesAutoLayout()
-        return centerYAnchor.constraint(equalTo: parentView.centerYAnchor, constant: constant).activate()
-    }
-    
-    @discardableResult
-    func widthEqual(to view: UIView, multiplier: CGFloat = 1, constant: CGFloat = 0) -> NSLayoutConstraint {
-        usesAutoLayout()
-        return widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: multiplier, constant: constant).activate()
-    }
-    
-    @discardableResult
-    func heightEqual(to view: UIView, multiplier: CGFloat = 1) -> NSLayoutConstraint {
-        usesAutoLayout()
-        return heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: multiplier).activate()
-    }
-    
-    @discardableResult
-    func heightEqualsToWidth(multiplier: CGFloat = 1) -> NSLayoutConstraint {
-        usesAutoLayout()
-        return heightAnchor.constraint(equalTo: widthAnchor, multiplier: multiplier).activate()
-    }
-    
-    @discardableResult
-    func pinTopSafeArea(to view: UIView, constant: CGFloat = 0) -> NSLayoutConstraint {
-        usesAutoLayout()
-        return safeAreaLayoutGuide.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: constant).activate()
-    }
-
-    
-    @discardableResult
-    func pinTop(to view: UIView, constant: CGFloat = 0) -> NSLayoutConstraint {
-        usesAutoLayout()
-        return topAnchor.constraint(equalTo: view.topAnchor, constant: constant).activate()
-    }
-    
-    @discardableResult
-    func pinBottom(to view: UIView, constant: CGFloat = 0) -> NSLayoutConstraint {
-        usesAutoLayout()
-        return bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: constant).activate()
-    }
-    
-    @discardableResult
-    func pinTopToBottom(to view: UIView, constant: CGFloat = 0) -> NSLayoutConstraint {
-        usesAutoLayout()
-        return topAnchor.constraint(equalTo: view.bottomAnchor, constant: constant).activate()
-    }
-    
-    @discardableResult
-    func pinSafeAreaBottom(to view: UIView, constant: CGFloat = 0) -> NSLayoutConstraint {
-        usesAutoLayout()
-        return bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -constant).activate()
-    }
-
-    @discardableResult
-    func pinLeading(to view: UIView, constant: CGFloat = 0) -> NSLayoutConstraint {
-        usesAutoLayout()
-        return leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: constant).activate()
-    }
-    @discardableResult
-    func pinTrailing(to view: UIView, constant: CGFloat = 0) -> NSLayoutConstraint {
-        usesAutoLayout()
-        return trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -constant).activate()
-    }
-    @discardableResult
-    func pinWidth(to constant: CGFloat) -> NSLayoutConstraint {
-        usesAutoLayout()
-        return widthAnchor.constraint(equalToConstant: constant).activate()
-    }
-    
-    @discardableResult
-    func pinHeight(to constant: CGFloat) -> NSLayoutConstraint {
-        usesAutoLayout()
-        return heightAnchor.constraint(equalToConstant: constant).activate()
-    }
-}
-
-extension NSLayoutConstraint {
-    @discardableResult
-    func activate() -> NSLayoutConstraint {
-        isActive = true
-        return self
-    }
-}
-
-extension UIImageView {
-    func setImageURL(_ url: String) {
-        setImageURL(URL(string: url))
-    }
-    
-    func setImageURL(_ url: URL?) {
-        guard let url = url else {
-            self.image = nil
-            return
-        }
-        DispatchQueue.global().async {
-            if let data = try? Data(contentsOf: url) {
-                DispatchQueue.main.async {
-                    self.image = UIImage(data: data)
-                }
-            }
-        }
-    }
-    func load(url: URL) {
-        DispatchQueue.global().async {
-            if let data = try? Data(contentsOf: url) {
-                DispatchQueue.main.async {
-                    self.image = UIImage(data: data)
-                }
-            }
-        }
-    }
-}
 
 extension UIViewController {
     

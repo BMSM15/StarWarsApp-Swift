@@ -28,6 +28,36 @@
             "title": "URL inválido",
             "url": "",
             "openMode": "INTERNAL"
+        },
+        {
+            "title": "Prozis",
+            "url": "https://www.prozis.com/",
+            "openMode": "MODAL"
+        },
+        {
+            "title": "Prozis",
+            "url": "https://www.prozis.com/",
+            "openMode": "MODAL"
+        },
+        {
+            "title": "Prozis",
+            "url": "https://www.prozis.com/",
+            "openMode": "MODAL"
+        },
+        {
+            "title": "Prozis",
+            "url": "https://www.prozis.com/",
+            "openMode": "MODAL"
+        },
+        {
+            "title": "Prozis",
+            "url": "https://www.prozis.com/",
+            "openMode": "MODAL"
+        },
+        {
+            "title": "Prozis",
+            "url": "https://www.prozis.com/",
+            "openMode": "MODAL"
         }
 	]
 }

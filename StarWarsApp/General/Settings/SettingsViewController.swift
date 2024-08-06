@@ -1,3 +1,11 @@
+//
+//  TabBarController.swift
+//  StarWarsApp
+//
+//  Created by Bruno Martins on 30/07/2024.
+//
+
+
 import UIKit
 import AVKit
 import WebKit
@@ -8,6 +16,8 @@ protocol SettingsViewControllerDelegate: AnyObject {
 
 class SettingsViewController: UIViewController {
     private let viewModel: SettingsViewModel
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
     private let nameLabel = UILabel()
     private let ageLabel = UILabel()
     private let profileImageView = UIImageView()
@@ -20,17 +30,16 @@ class SettingsViewController: UIViewController {
     var webView: WKWebView!
     weak var delegate: SettingsViewControllerDelegate?
     private let linksStackView = UIStackView()
-    
-    
+
     init(viewModel: SettingsViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -38,55 +47,77 @@ class SettingsViewController: UIViewController {
         setupConstraints()
         loadSettings()
     }
-    
+
     private func setupViews() {
         title = "Settings"
-        
-        view.addSubview(nameLabel)
-        view.addSubview(ageLabel)
-        view.addSubview(profileImageView)
-        view.addSubview(videoContainerView)
-        view.addSubview(linksStackView)
-        
+
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+
+        contentView.addSubview(nameLabel)
+        contentView.addSubview(ageLabel)
+        contentView.addSubview(profileImageView)
+        contentView.addSubview(videoContainerView)
+        contentView.addSubview(linksStackView)
+
         nameLabel.textAlignment = .left
         ageLabel.textAlignment = .left
-        
+
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         ageLabel.translatesAutoresizingMaskIntoConstraints = false
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         videoContainerView.translatesAutoresizingMaskIntoConstraints = false
         linksStackView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         videoContainerView.backgroundColor = .black
         linksStackView.axis = .vertical
         linksStackView.spacing = 10
         linksStackView.alignment = .fill
         linksStackView.distribution = .fill
     }
-    
+
     private func setupConstraints() {
-        nameLabel.pinBottom(to: profileImageView, constant: 50)
-        nameLabel.pinLeading(to: view, constant: 10)
+        scrollView.pinLeading(to: view)
+        scrollView.pinTrailing(to: view)
+        scrollView.pinTop(to: view)
+        scrollView.pinBottom(to: view)
         
-        ageLabel.pinTop(to: nameLabel, constant: 30)
-        ageLabel.pinLeading(to: view, constant: 10)
+        contentView.pinLeading(to: scrollView)
+        contentView.pinLeading(to: scrollView)
+        contentView.pinTop(to: scrollView)
+        contentView.pinBottom(to: scrollView)
+        contentView.widthEqual(to: scrollView)
         
-        profileImageView.pinTopSafeArea(to: view, constant: 10)
-        profileImageView.centerHorizontally(to: view)
-        profileImageView.widthEqual(to: view, multiplier: 0.25)
-        profileImageView.heightEqual(to: view, multiplier: 0.10)
+        nameLabel.pinTopToBottom(to: profileImageView, constant: 30)
+        nameLabel.pinLeading(to: contentView, constant: 10)
         
-        videoContainerView.pinTopSafeArea(to: ageLabel, constant: 35)
-        videoContainerView.pinLeading(to: view, constant: 10)
-        videoContainerView.pinTrailing(to: view, constant: 10)
+        ageLabel.pinTopToBottom(to: nameLabel, constant: 10)
+        ageLabel.pinLeading(to: contentView, constant: 10)
+        
+        profileImageView.pinSafeAreaTop(to: contentView, constant: 10)
+        profileImageView.centerHorizontally(to: contentView)
+        profileImageView.widthEqual(to: videoContainerView, multiplier: 0.3)
+        profileImageView.heightEqual(to: videoContainerView, multiplier: 0.5)
+        
+        videoContainerView.pinTopToBottom(to: ageLabel, constant: 30)
+        videoContainerView.pinLeading(to: contentView, constant: 10)
+        videoContainerView.pinTrailing(to: contentView, constant: 10)
         videoContainerView.heightEqualsToWidth(multiplier: 9.0/16.0)
         
-        linksStackView.pinTopToBottom(to: videoContainerView, constant: 10)
-        linksStackView.pinLeading(to: view, constant: 10)
-        linksStackView.pinTrailing(to: view, constant: 10)
+        linksStackView.pinTopToBottom(to: videoContainerView, constant: 30)
+        linksStackView.pinLeading(to: contentView, constant: 10)
+        linksStackView.pinTrailing(to: contentView, constant: 10)
+        linksStackView.pinBottom(to: contentView, constant: 10)
         
+        NSLayoutConstraint.activate([
+
+            contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor).withPriority(UILayoutPriority(250))
+            
+        ])
     }
-    
+
     func loadSettings() {
         activityIndicator.startAnimating()
         self.viewModel.fetchSettings {
@@ -96,10 +127,10 @@ class SettingsViewController: UIViewController {
         }
         activityIndicator.stopAnimating()
     }
-    
+
     private func updateUI() {
         guard let user = viewModel.user else { return }
-        
+
         nameLabel.text = "Name: \(user.name)"
         
         guard let age = viewModel.calculateAge(from: user.birthdate) else { return }
@@ -128,12 +159,12 @@ class SettingsViewController: UIViewController {
         
         setupLinkButtons(links: user.links)
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         playerLayer?.frame = videoContainerView.bounds
     }
-    
+
     private func observePlayer(_ playerItem: AVPlayerItem) {
         playerObserver = playerItem.observe(\AVPlayerItem.status) { [weak self] (playerItem, _) in
             if playerItem.status == .readyToPlay {
@@ -142,16 +173,16 @@ class SettingsViewController: UIViewController {
             }
         }
     }
-    
+
     @objc private func playerDidFinishPlaying(_ notification: Notification) {
         player.seek(to: .zero)
         player.play()
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
+
     private func setupLinkButtons(links: [Link]) {
         linksStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         for (index, link) in links.enumerated() {
@@ -166,13 +197,20 @@ class SettingsViewController: UIViewController {
             linksStackView.addArrangedSubview(button)
         }
     }
-    
+
     @objc private func linkButtonTapped(_ sender: UIButton) {
         guard let user = viewModel.user else { return }
         let link = user.links[sender.tag]
         delegate?.settingsviewController(self, needsToOpenLink: link)
     }
-    
-    
 }
 
+extension NSLayoutConstraint {
+    /// Sets the priority of the constraint.
+    /// - Parameter priority: The priority to set.
+    /// - Returns: The constraint itself, to allow for chaining.
+    func withPriority(_ priority: UILayoutPriority) -> NSLayoutConstraint {
+        self.priority = priority
+        return self
+    }
+}

@@ -1,3 +1,10 @@
+//
+//  TabBarController.swift
+//  StarWarsApp
+//
+//  Created by Bruno Martins on 17/07/2024.
+//
+
 import Foundation
 
 enum LoadState: Equatable {

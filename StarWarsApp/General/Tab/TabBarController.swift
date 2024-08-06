@@ -65,15 +65,20 @@ extension TabBarController: SettingsViewControllerDelegate {
         guard let url = URL(string: link.url) else {
             let alert = UIAlertController(
                 title: "Invalid URL",
-                message: "Try again later!",
+                message: "Do you want to go home?",
                 preferredStyle: .alert
             )
             alert.addAction(UIAlertAction(
-                title: "OK",
+                title: "Yes",
                 style: .default,
                 handler: { _ in
                     self.selectedIndex = 0
                 }
+            ))
+            alert.addAction(UIAlertAction(
+                title: "No",
+                style: .cancel,
+                handler: nil
             ))
             self.present(alert, animated: true, completion: nil)
             return
@@ -101,18 +106,3 @@ extension TabBarController : WebViewControllerDelegate {
         self.settingsNavController.popViewController(animated: true)
     }
 }
-
-
-//    func intSettingsviewController(_ viewController: UIViewController,_ url: URL) {
-//        let webViewModel = WebViewModel(url: url)
-//        let webViewController = WebViewController(viewModel: webViewModel)
-//        settingsNavController.pushViewController(webViewController, animated: true)
-//    }
-//
-//    func modSettingsviewController(_ viewController: UIViewController, _ url: URL) {
-//        let webViewModel = WebViewModel(url: url)
-//        let webViewController = WebViewController(viewModel: webViewModel)
-//        webNavController.setViewControllers([webViewController], animated: false)
-//        present(webNavController, animated: true, completion: nil)
-//    }
-

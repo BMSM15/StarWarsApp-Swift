@@ -1,3 +1,10 @@
+//
+//  TabBarController.swift
+//  StarWarsApp
+//
+//  Created by Bruno Martins on 17/07/2024.
+//
+
 import UIKit
 
 class StarWarsCell: UICollectionViewCell {
@@ -58,25 +65,22 @@ class StarWarsCell: UICollectionViewCell {
         genderLabel.translatesAutoresizingMaskIntoConstraints = false
         nameInputLabel.translatesAutoresizingMaskIntoConstraints = false
         genderInputLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        nameLabel.pinTop(to: contentView, constant: 10)
+        nameLabel.pinLeading(to: contentView, constant: 10)
 
-        NSLayoutConstraint.activate([
-            // Name Label and Input Label
-            nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            
-            nameInputLabel.centerYAnchor.constraint(equalTo: nameLabel.centerYAnchor),
-            nameInputLabel.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: 5),
-            nameInputLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-
-            // Gender Label and Input Label
-            genderLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 10),
-            genderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            
-            genderInputLabel.centerYAnchor.constraint(equalTo: genderLabel.centerYAnchor),
-            genderInputLabel.leadingAnchor.constraint(equalTo: genderLabel.trailingAnchor, constant: 5),
-            genderInputLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            genderLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
-        ])
+        nameInputLabel.centerVertically(to: nameLabel)
+        nameInputLabel.pinLeadingToTrailing(to: nameLabel, constant: 5)
+        nameInputLabel.pinTrailing(to: contentView, constant: 10)
+        
+        genderLabel.pinTopToBottom(to: nameLabel, constant: 10)
+        genderLabel.pinLeading(to: contentView, constant: 10)
+        genderLabel.pinBottom(to: contentView, constant: 10)
+        
+        genderInputLabel.centerVertically(to: genderLabel)
+        genderInputLabel.pinLeadingToTrailing(to: genderLabel, constant: 5)
+        genderInputLabel.pinTrailing(to: contentView, constant: 10)
+        
     }
 
     func configure(with person: Person) {

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA25EE972C611DE7001BF9B4 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA25EE962C611DE7001BF9B4 /* UIView.swift */; };
+		AA2B63D82C622073002F1E5F /* UImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B63D72C622073002F1E5F /* UImageView.swift */; };
 		AA2DB6E72C5A284200BC2E26 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2DB6E62C5A284200BC2E26 /* TabBarController.swift */; };
 		AA2DB6E92C5A73A400BC2E26 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2DB6E82C5A73A400BC2E26 /* User.swift */; };
 		AA30423C2C5CCBAE005BD0D2 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA30423B2C5CCBAE005BD0D2 /* WebViewController.swift */; };
@@ -53,6 +55,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AA25EE962C611DE7001BF9B4 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
+		AA2B63D72C622073002F1E5F /* UImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UImageView.swift; sourceTree = "<group>"; };
 		AA2DB6E62C5A284200BC2E26 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		AA2DB6E82C5A73A400BC2E26 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		AA30423B2C5CCBAE005BD0D2 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
@@ -110,6 +114,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA2B63D92C6220D8002F1E5F /* Web */ = {
+			isa = PBXGroup;
+			children = (
+				AA30423B2C5CCBAE005BD0D2 /* WebViewController.swift */,
+				AA30423D2C5CD041005BD0D2 /* WebViewModel.swift */,
+			);
+			path = Web;
+			sourceTree = "<group>";
+		};
+		AA2B63DA2C622101002F1E5F /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				AA2B63D72C622073002F1E5F /* UImageView.swift */,
+				AA25EE962C611DE7001BF9B4 /* UIView.swift */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		AA2B63DB2C622119002F1E5F /* Tab */ = {
+			isa = PBXGroup;
+			children = (
+				AA2DB6E62C5A284200BC2E26 /* TabBarController.swift */,
+			);
+			path = Tab;
+			sourceTree = "<group>";
+		};
 		AA3644D82C528E1C0096A146 /* Component */ = {
 			isa = PBXGroup;
 			children = (
@@ -207,10 +237,10 @@
 				AA3644D82C528E1C0096A146 /* Component */,
 				AA384FFB2C59427D001A46F7 /* Settings */,
 				AA4366C72C4801A000712862 /* Details */,
+				AA2B63D92C6220D8002F1E5F /* Web */,
+				AA2B63DB2C622119002F1E5F /* Tab */,
+				AA2B63DA2C622101002F1E5F /* Config */,
 				AA4366C62C48017400712862 /* Home */,
-				AA2DB6E62C5A284200BC2E26 /* TabBarController.swift */,
-				AA30423B2C5CCBAE005BD0D2 /* WebViewController.swift */,
-				AA30423D2C5CD041005BD0D2 /* WebViewModel.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -374,6 +404,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA25EE972C611DE7001BF9B4 /* UIView.swift in Sources */,
 				AA43668F2C47E1CF00712862 /* ViewController.swift in Sources */,
 				AA2DB6E72C5A284200BC2E26 /* TabBarController.swift in Sources */,
 				AA43F9BA2C5116F600665B1F /* ErrorViewController.swift in Sources */,
@@ -387,6 +418,7 @@
 				AA3E96072C4914EC00080279 /* Person.swift in Sources */,
 				AA4366BB2C47F50A00712862 /* DetailsViewController.swift in Sources */,
 				AA30423C2C5CCBAE005BD0D2 /* WebViewController.swift in Sources */,
+				AA2B63D82C622073002F1E5F /* UImageView.swift in Sources */,
 				AA3644DA2C528E3B0096A146 /* Button.swift in Sources */,
 				AA384FFD2C59429A001A46F7 /* SettingsViewController.swift in Sources */,
 				AA4366BF2C47F68C00712862 /* ViewModel.swift in Sources */,
