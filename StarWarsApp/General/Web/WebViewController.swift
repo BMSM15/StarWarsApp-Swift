@@ -9,14 +9,21 @@
 import UIKit
 import WebKit
 
+// MARK: - Web Controller Delegate
+
 protocol WebViewControllerDelegate : AnyObject {
     func webViewControllerNeedsToGoBack(_ viewController: WebViewController)
 }
 
 class WebViewController: UIViewController, WKNavigationDelegate {
+    
+    // MARK: - Variables
+    
     var webView: WKWebView!
     let viewModel: WebViewModel
     weak var delegate: WebViewControllerDelegate?
+    
+    // MARK: - Initialization
     
     
     init(viewModel: WebViewModel) {
@@ -27,6 +34,8 @@ class WebViewController: UIViewController, WKNavigationDelegate {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - View Life Cycle
     
     override func loadView() {
         let webConfiguration = WKWebViewConfiguration()
@@ -40,6 +49,8 @@ class WebViewController: UIViewController, WKNavigationDelegate {
         let myRequest = URLRequest(url: viewModel.url)
         webView.load(myRequest)
     }
+    
+    // MARK: - Web View Error Functions
     
     // Handle error when navigation fails
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {

@@ -9,16 +9,21 @@
 import Foundation
 
 class DetailsViewModel {
+    
+    // MARK: - Variables
+    
     var character: CharacterDetails?
     private let person: Person
     let services : Services
+    
+    // MARK: - Initialization
 
     init(person: Person, services: Services) {
         self.services = services
         self.person = person
     }
 
-    // MARK: - Public Functions
+    // MARK: - Fetch Data
 
     func fetchCharacterDetails(completion: @escaping (CharacterDetails?) -> Void) {
 
@@ -48,8 +53,6 @@ class DetailsViewModel {
             completion(self.character)
         }
     }
-    
-    // MARK: - Private Functions
 
     private func fetchVehicles(completion: @escaping ([Vehicle]) -> Void) {
         let group = DispatchGroup()

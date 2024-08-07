@@ -8,7 +8,12 @@
 import Foundation
 
 class WebViewModel {
+    
+    // MARK: - Variables
+    
     let url: URL
+    
+    // MARK: - Initialization
     
     init(url: URL) {
         self.url = url

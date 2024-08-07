@@ -10,207 +10,151 @@ import UIKit
 import AVKit
 import WebKit
 
+//MARK: - Controler Delegate
+
 protocol SettingsViewControllerDelegate: AnyObject {
     func settingsviewController(_ viewController: SettingsViewController, needsToOpenLink link: Link)
 }
 
-class SettingsViewController: UIViewController {
+class SettingsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    //MARK: - Variables
+    
+    let collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .white
+        return collectionView
+    }()
     private let viewModel: SettingsViewModel
-    private let scrollView = UIScrollView()
-    private let contentView = UIView()
-    private let nameLabel = UILabel()
-    private let ageLabel = UILabel()
-    private let profileImageView = UIImageView()
-    private var playerItem: AVPlayerItem!
-    private var player: AVPlayer!
-    private var playerLayer: AVPlayerLayer!
-    private var playerObserver: NSKeyValueObservation!
-    private let videoContainerView = UIView()
-    private let activityIndicator = UIActivityIndicatorView(style: .large)
-    var webView: WKWebView!
     weak var delegate: SettingsViewControllerDelegate?
-    private let linksStackView = UIStackView()
-
+    
+    //MARK: - Initialization
+    
     init(viewModel: SettingsViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
+    //MARK: -  View Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        setupViews()
-        setupConstraints()
+        setupCollectionView()
         loadSettings()
     }
-
-    private func setupViews() {
-        title = "Settings"
-
-        view.addSubview(scrollView)
-        scrollView.addSubview(contentView)
-
-        contentView.addSubview(nameLabel)
-        contentView.addSubview(ageLabel)
-        contentView.addSubview(profileImageView)
-        contentView.addSubview(videoContainerView)
-        contentView.addSubview(linksStackView)
-
-        nameLabel.textAlignment = .left
-        ageLabel.textAlignment = .left
-
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        ageLabel.translatesAutoresizingMaskIntoConstraints = false
-        profileImageView.translatesAutoresizingMaskIntoConstraints = false
-        videoContainerView.translatesAutoresizingMaskIntoConstraints = false
-        linksStackView.translatesAutoresizingMaskIntoConstraints = false
-
-        videoContainerView.backgroundColor = .black
-        linksStackView.axis = .vertical
-        linksStackView.spacing = 10
-        linksStackView.alignment = .fill
-        linksStackView.distribution = .fill
+    
+    //MARK: - Setup
+    
+    private func setupCollectionView() {
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(NameAgeCell.self, forCellWithReuseIdentifier: "NameAgeCell")
+        collectionView.register(ProfileImageCell.self, forCellWithReuseIdentifier: "ProfileImageCell")
+        collectionView.register(VideoCell.self, forCellWithReuseIdentifier: "VideoCell")
+        collectionView.register(SpacerCell.self, forCellWithReuseIdentifier: "SpacerCell")
+        collectionView.register(LinkCell.self, forCellWithReuseIdentifier: "LinkCell")
+        view.addSubview(collectionView)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.pin(to: view)
     }
-
-    private func setupConstraints() {
-        scrollView.pinLeading(to: view)
-        scrollView.pinTrailing(to: view)
-        scrollView.pinTop(to: view)
-        scrollView.pinBottom(to: view)
-        
-        contentView.pinLeading(to: scrollView)
-        contentView.pinLeading(to: scrollView)
-        contentView.pinTop(to: scrollView)
-        contentView.pinBottom(to: scrollView)
-        contentView.widthEqual(to: scrollView)
-        
-        nameLabel.pinTopToBottom(to: profileImageView, constant: 30)
-        nameLabel.pinLeading(to: contentView, constant: 10)
-        
-        ageLabel.pinTopToBottom(to: nameLabel, constant: 10)
-        ageLabel.pinLeading(to: contentView, constant: 10)
-        
-        profileImageView.pinSafeAreaTop(to: contentView, constant: 10)
-        profileImageView.centerHorizontally(to: contentView)
-        profileImageView.widthEqual(to: videoContainerView, multiplier: 0.3)
-        profileImageView.heightEqual(to: videoContainerView, multiplier: 0.5)
-        
-        videoContainerView.pinTopToBottom(to: ageLabel, constant: 30)
-        videoContainerView.pinLeading(to: contentView, constant: 10)
-        videoContainerView.pinTrailing(to: contentView, constant: 10)
-        videoContainerView.heightEqualsToWidth(multiplier: 9.0/16.0)
-        
-        linksStackView.pinTopToBottom(to: videoContainerView, constant: 30)
-        linksStackView.pinLeading(to: contentView, constant: 10)
-        linksStackView.pinTrailing(to: contentView, constant: 10)
-        linksStackView.pinBottom(to: contentView, constant: 10)
-        
-        NSLayoutConstraint.activate([
-
-            contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor).withPriority(UILayoutPriority(250))
-            
-        ])
-    }
-
+    
+    //MARK: - Loading View
+    
     func loadSettings() {
-        activityIndicator.startAnimating()
-        self.viewModel.fetchSettings {
+        viewModel.fetchSettings {
             DispatchQueue.main.async {
-                self.updateUI()
-            }
-        }
-        activityIndicator.stopAnimating()
-    }
-
-    private func updateUI() {
-        guard let user = viewModel.user else { return }
-
-        nameLabel.text = "Name: \(user.name)"
-        
-        guard let age = viewModel.calculateAge(from: user.birthdate) else { return }
-        ageLabel.text = "Age: \(age)"
-        
-        if let imageUrl = URL(string: user.imageURL) {
-            profileImageView.load(url: imageUrl)
-        }
-        
-        if let videoUrl = URL(string: user.videoURL) {
-            let asset = AVAsset(url: videoUrl)
-            playerItem = AVPlayerItem(asset: asset)
-            observePlayer(playerItem)
-            player = AVPlayer(playerItem: playerItem)
-            
-            playerLayer = AVPlayerLayer(player: player)
-            playerLayer.frame = videoContainerView.bounds
-            playerLayer.videoGravity = .resizeAspect
-            videoContainerView.layer.addSublayer(playerLayer)
-        }
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(playerDidFinishPlaying(_:)),
-                                               name: .AVPlayerItemDidPlayToEndTime,
-                                               object: playerItem)
-        
-        setupLinkButtons(links: user.links)
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        playerLayer?.frame = videoContainerView.bounds
-    }
-
-    private func observePlayer(_ playerItem: AVPlayerItem) {
-        playerObserver = playerItem.observe(\AVPlayerItem.status) { [weak self] (playerItem, _) in
-            if playerItem.status == .readyToPlay {
-                self?.player.play()
-                self?.player.isMuted = true
+                self.collectionView.reloadData()
             }
         }
     }
-
-    @objc private func playerDidFinishPlaying(_ notification: Notification) {
-        player.seek(to: .zero)
-        player.play()
+    
+    //MARK: - UICollectionView DataSource
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
     }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
-    private func setupLinkButtons(links: [Link]) {
-        linksStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        for (index, link) in links.enumerated() {
-            let button = UIButton(type: .system)
-            button.setTitle(link.title, for: .normal)
-            button.setTitleColor(.white, for:.normal)
-            button.backgroundColor = .gray
-            button.layer.cornerRadius = 10
-            button.layer.masksToBounds = true
-            button.tag = index
-            button.addTarget(self, action: #selector(linkButtonTapped(_:)), for: .touchUpInside)
-            linksStackView.addArrangedSubview(button)
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        guard let user = viewModel.user else { return 0 }
+        switch section {
+        case 0: return 2
+        case 1: return 1 + user.links.count
+        default: return 0
         }
     }
-
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let user = viewModel.user else { return UICollectionViewCell() }
+        
+        switch indexPath.section {
+        case 0:
+            if indexPath.item == 0 {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProfileImageCell", for: indexPath) as! ProfileImageCell
+                if let imageUrl = URL(string: user.imageURL) {
+                    cell.configure(with: imageUrl)
+                }
+                return cell
+            } else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NameAgeCell", for: indexPath) as! NameAgeCell
+                let age = viewModel.calculateAge(from: user.birthdate) ?? 0
+                cell.configure(name: user.name, age: age)
+                return cell
+            }
+        case 1:
+            if indexPath.item == 0 {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoCell", for: indexPath) as! VideoCell
+                if let videoUrl = URL(string: user.videoURL) {
+                    cell.configure(with: videoUrl)
+                }
+                return cell
+            } else if indexPath.item == 1 {
+                return collectionView.dequeueReusableCell(withReuseIdentifier: "SpacerCell", for: indexPath)
+            } else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LinkCell", for: indexPath) as! LinkCell
+                let link = user.links[indexPath.item - 2]
+                cell.configure(with: link.title, tag: indexPath.item - 2, target: self, action: #selector(linkButtonTapped(_:)))
+                return cell
+            }
+        default:
+            return UICollectionViewCell()
+        }
+    }
+    
+    //MARK: - UICollectionViewDelegateFlowLayout
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = collectionView.frame.width - 20
+        switch indexPath.section {
+        case 0:
+            if indexPath.item == 0 {
+                return CGSize(width: width, height: width * 0.30)
+            } else {
+                return CGSize(width: width, height: 10)
+            }
+        case 1:
+            if indexPath.item == 0 {
+                return CGSize(width: width, height: 50)
+            } else if indexPath.item == 1 {
+                return CGSize(width: width, height: 220)
+            } else {
+                return CGSize(width: width, height: 30) 
+            }
+        default:
+            return CGSize.zero
+        }
+    }
+    
+    //MARK: - Button Tapped Delegate
+    
     @objc private func linkButtonTapped(_ sender: UIButton) {
         guard let user = viewModel.user else { return }
         let link = user.links[sender.tag]
         delegate?.settingsviewController(self, needsToOpenLink: link)
-    }
-}
-
-extension NSLayoutConstraint {
-    /// Sets the priority of the constraint.
-    /// - Parameter priority: The priority to set.
-    /// - Returns: The constraint itself, to allow for chaining.
-    func withPriority(_ priority: UILayoutPriority) -> NSLayoutConstraint {
-        self.priority = priority
-        return self
     }
 }

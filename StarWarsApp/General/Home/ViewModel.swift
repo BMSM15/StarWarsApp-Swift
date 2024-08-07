@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - Home Load States
+
 enum LoadState: Equatable {
     case nextPage(Int, searchText: String?)
     case loadingPage(Int, searchText: String?)
@@ -52,28 +54,30 @@ enum LoadState: Equatable {
 
 class ViewModel {
     
+    // MARK: - Variables
+    
     private enum Constants {
         static let initialLoadState: LoadState = .nextPage(1, searchText: nil)
     }
-    
     var people: [Person] = []
-    
     var loadState: LoadState = Constants.initialLoadState
     private let services: Services
     var onWillLoadData: (() -> ())?
     var onDataChanged: ((Bool) -> ())?
+    var canLoadMore: Bool {
+        return loadState.isNextPage
+    }
+    var canRefresh: Bool {
+        return people.isEmpty && !loadState.isLoadingPage
+    }
+    
+    // MARK: - Initialization
     
     init(services: Services) {
         self.services = services
     }
     
-    var canLoadMore: Bool {
-        return loadState.isNextPage
-    }
-    
-    var canRefresh: Bool {
-        return people.isEmpty && !loadState.isLoadingPage
-    }
+    // MARK: - Fetch Data
         
     func loadData() {
         guard case let .nextPage(page, searchText) = loadState else {

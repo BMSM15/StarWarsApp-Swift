@@ -8,15 +8,24 @@
 import UIKit
 
 class StarWarsCell: UICollectionViewCell {
+    
+    // MARK: - Variables
+    
     let nameLabel = UILabel()
     let genderLabel = UILabel()
     let nameInputLabel = UILabel()
     let genderInputLabel = UILabel()
+    
+    // MARK: - Initialization
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
         setupConstraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func prepareForReuse() {
@@ -27,9 +36,7 @@ class StarWarsCell: UICollectionViewCell {
         genderInputLabel.text = ""
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    // MARK: - Setup
 
     private func setupViews() {
         contentView.addSubview(nameLabel)
@@ -37,18 +44,15 @@ class StarWarsCell: UICollectionViewCell {
         contentView.addSubview(nameInputLabel)
         contentView.addSubview(genderInputLabel)
         
-        // Configurações das labels
         nameLabel.textColor = .white
         genderLabel.textColor = .white
         nameInputLabel.textColor = .white
         genderInputLabel.textColor = .white
 
-        // Configurações do conteúdo da célula
         contentView.layer.cornerRadius = 10
         contentView.layer.masksToBounds = true
         contentView.backgroundColor = .gray
 
-        // Configurar content hugging e compression resistance
         nameLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         genderLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         nameLabel.setContentCompressionResistancePriority(.required, for: .horizontal)

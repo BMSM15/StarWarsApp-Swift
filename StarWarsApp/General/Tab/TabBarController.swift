@@ -10,10 +10,13 @@ import UIKit
 
 class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
+    // MARK: - Variables
+    
     let services: Services = .init()
     let homeNavController = UINavigationController()
     let settingsNavController = UINavigationController()
     
+    // MARK: - View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +24,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         self.delegate = self
     }
     
+    // MARK: - Setup
     
     private func setupTabs() {
         let homeViewModel = ViewModel(services: services)
@@ -42,6 +46,8 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         navigationController.setViewControllers([viewController], animated: false)
     }
 }
+
+// MARK: - Delegate Extensions
 
 extension TabBarController: ViewControllerDelegate {
     func viewController(_ viewController: ViewController, needsOpenDetailsForCharacter person: Person) {

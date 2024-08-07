@@ -10,7 +10,12 @@ import UIKit
 public typealias ButtonActionHandler = (UIButton) -> Void
 
 class Button: UIButton {
+    
+    //MARK: - Variables
+    
     var actionHandler: ButtonActionHandler?
+    
+    //MARK: - Initialization
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,6 +25,8 @@ class Button: UIButton {
     public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    //MARK: - Setup
 
     private func setup() {
         addTarget(self, action: #selector(buttonWasTapped), for: .touchUpInside)

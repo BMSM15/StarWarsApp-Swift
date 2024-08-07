@@ -8,7 +8,12 @@
 import Foundation
 
 class SettingsViewModel {
+    
+    //MARK: Variables
+    
     var user: User?
+    
+    //MARK: Fetch Data
     
     func fetchSettings(completion: @escaping () -> Void) {
         guard let url = Bundle.main.url(forResource: "profile", withExtension: "json") else {
@@ -37,6 +42,8 @@ class SettingsViewModel {
         return ageComponents.year
     }
 }
+
+//MARK: Extensions
 
 extension DateFormatter {
     static let shortDate: DateFormatter = {

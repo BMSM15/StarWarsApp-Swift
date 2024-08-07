@@ -8,18 +8,25 @@
 import UIKit
 
 class ErrorViewController: UIViewController {
+    
+    //MARK: - Variables
+    
     private let errorLabel = UILabel()
     private let errorButton : Button
     private let backHomeButton : Button
     var retryButtonHandler: (() -> Void)?
     var goBackButtonHandler: (() -> Void)?
-    //weak var delegate: ErrorViewControllerDelegate?
+    
+    
+    //MARK: - View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         errorView()
     }
+    
+    //MARK: - Initialization
     
     init() {
         self.errorButton = Button()
@@ -31,7 +38,9 @@ class ErrorViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-        
+     
+    //MARK: - Setup
+    
     private func errorView() {
         view.addSubview(errorLabel)
         view.addSubview(errorButton)

@@ -7,11 +7,16 @@
 
 import UIKit
 
+// MARK: - View Controler Delegate
+
 protocol ViewControllerDelegate: AnyObject {
     func viewController(_ viewController: ViewController, needsOpenDetailsForCharacter person: Person)
 }
 
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    // MARK: - Variables
+    
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -23,6 +28,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     let refreshControl = UIRefreshControl()
     private let searchController = UISearchController(searchResultsController: nil)
     
+    // MARK: - Initialization
     
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -32,6 +38,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - View Life Cycle
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,6 +60,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
         loadData()
     }
+    
+    // MARK: - Refresh Controler
         
     private func toogleRefreshControl() {
         if viewModel.canRefresh {
@@ -74,6 +84,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     @objc func pullRefresh(_ sender: AnyObject) {
         reloadData()
     }
+    
+    // MARK: - Setup
     
     private func setupCollectionView() {
         collectionView.backgroundColor = .white
@@ -108,6 +120,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
+    
+    // MARK: - Load Data
     
     private func loadData() {
         guard viewModel.canLoadMore else {

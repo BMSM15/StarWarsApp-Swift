@@ -8,13 +8,17 @@
 
 import UIKit
 
+// MARK: - Delegate Controller
+
 protocol DetailsViewControllerDelegate: AnyObject {
     func detailsViewControllerNeedsToGoBack()
 }
 
 class DetailsViewController: UIViewController {
-    let viewModel: DetailsViewModel
     
+    // MARK: - Variables
+    
+    let viewModel: DetailsViewModel
     private let nameLabel = UILabel()
     private let genderLabel = UILabel()
     private let languageImageView = UIImageView()
@@ -26,6 +30,8 @@ class DetailsViewController: UIViewController {
     let errorViewController = ErrorViewController()
     weak var delegate: DetailsViewControllerDelegate?
     
+    // MARK: - Initialization
+    
     init(viewModel: DetailsViewModel) {
         self.viewModel = viewModel
         
@@ -36,6 +42,19 @@ class DetailsViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - View Life Cycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+        setupViews()
+        setupConstraints()
+        loadCharacterDetails()
+        setupActions()
+    }
+    
+    // MARK: - Setup
     
     private func setupActions() {
         errorViewController.retryButtonHandler = { [weak self] in
@@ -53,15 +72,6 @@ class DetailsViewController: UIViewController {
     
     func hideErrorView() {
         remove(errorViewController)
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .white
-        setupViews()
-        setupConstraints()
-        loadCharacterDetails()
-        setupActions()
     }
     
     private func setupViews() {
@@ -124,6 +134,8 @@ class DetailsViewController: UIViewController {
         activityIndicator.tintColor = .red
     }
     
+    // MARK: - Functions
+    
     func loadCharacterDetails() {
         activityIndicator.startAnimating()
         self.viewModel.fetchCharacterDetails { [weak self] details in
@@ -148,6 +160,7 @@ class DetailsViewController: UIViewController {
     }
 }
 
+// MARK: - Extensions
 
 extension UIViewController {
     
