@@ -26,7 +26,7 @@ class NameAgeCell: UICollectionViewCell {
         contentView.addSubview(nameLabel)
         contentView.addSubview(ageLabel)
         
-        nameLabel.pinTopToBottom(to: contentView, constant: 10)
+        nameLabel.pinTop(to: contentView, constant: 10)
         nameLabel.pinLeading(to: contentView, constant: 10)
         ageLabel.pinTopToBottom(to: nameLabel, constant: 10)
         ageLabel.pinLeading(to: contentView, constant: 10)
@@ -34,8 +34,32 @@ class NameAgeCell: UICollectionViewCell {
     }
     
     func configure(name: String, age: Int) {
-        nameLabel.text = "Name: \(name)"
-        ageLabel.text = "Age: \(age)"
+        let boldAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.boldSystemFont(ofSize: 14)
+        ]
+        let regularAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 14)
+        ]
+        
+        let nameAttributedText = NSMutableAttributedString(string: "Name: ", attributes: boldAttributes)
+        nameAttributedText.append(NSAttributedString(string: name, attributes: regularAttributes))
+        
+        let ageAttributedText = NSMutableAttributedString(string: "Age: ", attributes: boldAttributes)
+        ageAttributedText.append(NSAttributedString(string: "\(age)", attributes: regularAttributes))
+        
+        nameLabel.attributedText = nameAttributedText
+        ageLabel.attributedText = ageAttributedText
     }
 }
 
+// Colocar headers nas Settings:
+//section 1 :  "User data"
+//section 3 : "Links"
+
+// Attributed text na celula nameAndAge
+
+// Adicionar error view controller nas Settings
+
+// Usar estruturas de dados na criaçao do data source das Settings
+
+// Usar didSelect da collectionView para abrir os links

@@ -27,7 +27,7 @@ class VideoCell: UICollectionViewCell {
     private func setupViews() {
         videoContainerView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(videoContainerView)
-        videoContainerView.pinTopToBottom(to: contentView, constant: 30)
+        videoContainerView.pinTop(to: contentView, constant: 10)
         videoContainerView.pinLeading(to: contentView, constant: 10)
         videoContainerView.pinTrailing(to: contentView, constant: 10)
         videoContainerView.heightEqualsToWidth(multiplier: 9.0 / 16.0)

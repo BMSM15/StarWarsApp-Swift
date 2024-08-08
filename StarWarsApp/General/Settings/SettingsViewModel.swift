@@ -7,11 +7,29 @@
 
 import Foundation
 
+enum SectionItems {
+    case profileImage(url: URL)
+    case nameAndAge(name : String, age: Int)
+    case video(url : URL)
+    case links([Link])
+    
+    var itemCount: Int {
+           switch self {
+           case .profileImage, .nameAndAge, .video:
+               return 1
+           case .links(let links):
+               return links.count
+           }
+       }
+}
+
+
 class SettingsViewModel {
     
     //MARK: Variables
     
     var user: User?
+    var sections: [SectionItems] = []
     
     //MARK: Fetch Data
     
@@ -26,6 +44,18 @@ class SettingsViewModel {
             let decoder = JSONDecoder()
             
             self.user = try decoder.decode(User.self, from: data)
+            if var imageURL = user?.imageURL {
+                sections.append(.profileImage(url: URL(string: imageURL)!))
+            }
+            if var name = user?.name, let age = calculateAge(from: user!.birthdate){
+                sections.append(.nameAndAge(name: name, age: age))
+            }
+            if var videoURL = user?.videoURL {
+                sections.append(.video(url: URL(string: videoURL)!))
+            }
+            if var links = user?.links {
+                sections.append(.links(links))
+            }
             completion()
         } catch {
             print("Failed to decode profile.json: \(error.localizedDescription)")

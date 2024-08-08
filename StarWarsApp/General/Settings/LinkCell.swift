@@ -8,7 +8,7 @@
 import UIKit
 
 class LinkCell: UICollectionViewCell {
-    let button = UIButton(type: .system)
+    let titleLabel = UILabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,22 +20,20 @@ class LinkCell: UICollectionViewCell {
     }
 
     private func setupViews() {
-        button.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(button)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(titleLabel)
         
-        button.pinLeading(to: contentView, constant: 10)
-        button.pinTrailing(to: contentView, constant: 10)
-        button.backgroundColor = .gray
-        button.tintColor = .white
+        titleLabel.pinTop(to: contentView, constant: 10)
+        titleLabel.pinLeading(to: contentView, constant: 10)
+        titleLabel.centerHorizontally(to: contentView)
+        titleLabel.backgroundColor = .gray
+        titleLabel.textColor = .white
+        titleLabel.textAlignment = .center
         contentView.layer.masksToBounds = true
         contentView.layer.cornerRadius = 10
-        
     }
-
-    func configure(with title: String, tag: Int, target: Any, action: Selector) {
-        button.setTitle(title, for: .normal)
-        button.tag = tag
-        button.addTarget(target, action: action, for: .touchUpInside)
+    
+    func configure(with name: String) {
+        titleLabel.text = "\(name)"
     }
 }
-
