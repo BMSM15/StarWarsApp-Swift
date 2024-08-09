@@ -14,6 +14,7 @@ import WebKit
 
 protocol SettingsViewControllerDelegate: AnyObject {
     func settingsviewController(_ viewController: SettingsViewController, needsToOpenLink link: Link)
+    func settingsviewControllerNeedToGoHome (_ viewController: SettingsViewController)
 }
 
 class SettingsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -26,7 +27,8 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         collectionView.backgroundColor = .white
         return collectionView
     }()
-    
+    private let activityIndicator = UIActivityIndicatorView(style: .large)
+    let errorViewController = ErrorViewController()
     private let viewModel: SettingsViewModel
     weak var delegate: SettingsViewControllerDelegate?
     
@@ -48,6 +50,8 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         view.backgroundColor = .white
         setupCollectionView()
         loadSettings()
+        setupIndicator()
+        setupActions()
     }
     
     //MARK: - Setup
@@ -56,24 +60,57 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(NameAgeCell.self, forCellWithReuseIdentifier: CellIndentifier.nameAgeCell)
-        collectionView.register(ProfileImageCell.self, forCellWithReuseIdentifier: "ProfileImageCell")
-        collectionView.register(VideoCell.self, forCellWithReuseIdentifier: "VideoCell")
-        collectionView.register(SpacerCell.self, forCellWithReuseIdentifier: "SpacerCell")
-        collectionView.register(LinkCell.self, forCellWithReuseIdentifier: "LinkCell")
+        collectionView.register(ProfileImageCell.self, forCellWithReuseIdentifier: CellIndentifier.profileImageCell)
+        collectionView.register(VideoCell.self, forCellWithReuseIdentifier: CellIndentifier.videoCell)
+        collectionView.register(LinkCell.self, forCellWithReuseIdentifier: CellIndentifier.linkCell)
+        collectionView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CellIndentifier.headerViewString)
+        collectionView.register(HeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CellIndentifier.headerCell)
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.pin(to: view)
     }
     
+    func setupIndicator() {
+        view.addSubview(activityIndicator)
+        activityIndicator.centerHorizontally(to: view)
+        activityIndicator.centerVertically(to: view)
+        activityIndicator.tintColor = .red
+    }
+    
+    private func setupActions() {
+        errorViewController.retryButtonHandler = { [weak self] in
+            self?.loadSettings()
+            self?.hideErrorView()
+        }
+        errorViewController.goBackButtonHandler = { [weak self] in
+            self?.delegate?.settingsviewControllerNeedToGoHome(self!)
+        }
+    }
+    
+    func showErrorView() {
+        self.add(errorViewController)
+    }
+    
+    func hideErrorView() {
+        remove(errorViewController)
+    }
+    
     //MARK: - Loading View
     
     func loadSettings() {
+        activityIndicator.startAnimating()
         viewModel.fetchSettings {
             DispatchQueue.main.async {
-                self.collectionView.reloadData()
+                if Int.random(in: 0...10) > 7 {
+                    self.collectionView.reloadData()
+                } else {
+                    self.showErrorView()
+                }
+                self.activityIndicator.stopAnimating()
             }
         }
     }
+    
     
     //MARK: - UICollectionView DataSource
     
@@ -90,29 +127,29 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         
         switch sectionItem {
         case .profileImage(let url):
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProfileImageCell", for: indexPath) as! ProfileImageCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIndentifier.profileImageCell, for: indexPath) as! ProfileImageCell
             cell.configure(with: url)
             return cell
             
         case .nameAndAge(let name, let age):
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NameAgeCell", for: indexPath) as! NameAgeCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIndentifier.nameAgeCell, for: indexPath) as! NameAgeCell
             cell.configure(name: name, age: age)
             return cell
             
         case .video(let url):
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoCell", for: indexPath) as! VideoCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIndentifier.videoCell, for: indexPath) as! VideoCell
             cell.configure(with: url)
             return cell
             
         case .links(let links):
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LinkCell", for: indexPath) as! LinkCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIndentifier.linkCell, for: indexPath) as! LinkCell
             let link = links[indexPath.item]
             cell.configure(with: link.title)
             cell.debug(color: .red)
             return cell
         }
     }
-
+    
     
     //MARK: - UICollectionViewDelegateFlowLayout
     
@@ -130,8 +167,7 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         case .video:
             return CGSize(width: width, height: width * 0.56)
             
-        case .links(let links):
-            let title = links[indexPath.item].title
+        case .links:
             return CGSize(width: width, height: 30)
         }
     }
@@ -141,12 +177,33 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         
         switch sectionItem {
         case .profileImage, .nameAndAge, .video:
-            // Handle non-link selections if needed
             break
             
         case .links(let links):
             let selectedLink = links[indexPath.item]
             delegate?.settingsviewController(self, needsToOpenLink: selectedLink)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CellIndentifier.headerCell, for: indexPath) as! HeaderCell
+        headerView.configure(with: headerText(for: indexPath.section))
+        return headerView
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: 40)
+    }
+    
+    private func headerText(for section: Int) -> String {
+        let sectionItem = viewModel.sections[section]
+        switch sectionItem {
+        case .nameAndAge:
+            return "User Data"
+        case .links:
+            return "Links"
+        default:
+            return ""
         }
     }
 }
@@ -155,6 +212,11 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
 
 enum CellIndentifier {
     static let nameAgeCell = "NameAgeCell"
+    static let videoCell = "VideoCell"
+    static let linkCell = "LinkCell"
+    static let profileImageCell = "ProfileImageCell"
+    static let headerViewString = "HeaderView"
+    static let headerCell = "HeaderCell"
 }
 
 //MARK: - UIView Extension

@@ -63,7 +63,6 @@ class ErrorViewController: UIViewController {
         backHomeButton.pinTop(to: errorButton, constant: 50)
         backHomeButton.widthEqual(to: view, multiplier: 0.5)
         backHomeButton.centerHorizontally(to: view)
-        //errorButton.addTarget(self, action: #selector (buttonclicked), for: .touchUpInside)
         errorButton.actionHandler = { [weak self] _ in
            self?.retryButtonHandler?()
         }

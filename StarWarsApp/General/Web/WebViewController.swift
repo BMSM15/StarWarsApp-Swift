@@ -1,5 +1,5 @@
 //
-//  TabBarController.swift
+//  WebViewController.swift
 //  StarWarsApp
 //
 //  Created by Bruno Martins on 02/08/2024.
@@ -52,7 +52,6 @@ class WebViewController: UIViewController, WKNavigationDelegate {
     
     // MARK: - Web View Error Functions
     
-    // Handle error when navigation fails
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         presentErrorViewController()
     }
@@ -61,7 +60,6 @@ class WebViewController: UIViewController, WKNavigationDelegate {
         presentErrorViewController()
     }
     
-    // Present ErrorViewController when an error occursb
     private func presentErrorViewController() {
         let errorVC = ErrorViewController()
         errorVC.retryButtonHandler = { [weak self] in

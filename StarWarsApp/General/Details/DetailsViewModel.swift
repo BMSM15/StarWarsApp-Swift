@@ -1,5 +1,5 @@
 //
-//  TabBarController.swift
+//  DetailsViewModel.swift
 //  StarWarsApp
 //
 //  Created by Bruno Martins on 20/07/2024.

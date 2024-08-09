@@ -1,5 +1,5 @@
 //
-//  TabBarController.swift
+//  ViewModel.swift
 //  StarWarsApp
 //
 //  Created by Bruno Martins on 17/07/2024.
@@ -109,7 +109,7 @@ class ViewModel {
                 self.onDataChanged?(true)
             case .failure(let error):
                 print("Failed to fetch people: \(error.localizedDescription)")
-                self.loadState = .nextPage(page, searchText: searchText) // Keep the current page
+                self.loadState = .nextPage(page, searchText: searchText)
                 self.onDataChanged?(false)
             }
         }

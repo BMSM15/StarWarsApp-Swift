@@ -1,5 +1,5 @@
 //
-//  TabBarController.swift
+//  DetailsViewController.swift
 //  StarWarsApp
 //
 //  Created by Bruno Martins on 20/07/2024.
@@ -166,7 +166,6 @@ extension UIViewController {
     
     func add(_ child: UIViewController, frame: CGRect? = nil) {
         addChild(child)
-        //child.view.frame = self.view.frame
         if frame != nil {
             if let frame = frame {
                 child.view.frame = frame

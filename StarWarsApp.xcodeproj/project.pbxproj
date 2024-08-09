@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA23AAD62C6602D100118F55 /* HeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA23AAD52C6602D100118F55 /* HeaderCell.swift */; };
 		AA25EE972C611DE7001BF9B4 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA25EE962C611DE7001BF9B4 /* UIView.swift */; };
 		AA2B63D82C622073002F1E5F /* UImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B63D72C622073002F1E5F /* UImageView.swift */; };
 		AA2DB6E72C5A284200BC2E26 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2DB6E62C5A284200BC2E26 /* TabBarController.swift */; };
@@ -60,6 +61,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AA23AAD52C6602D100118F55 /* HeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCell.swift; sourceTree = "<group>"; };
 		AA25EE962C611DE7001BF9B4 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		AA2B63D72C622073002F1E5F /* UImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UImageView.swift; sourceTree = "<group>"; };
 		AA2DB6E62C5A284200BC2E26 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 				AA2ED5312C63810C009F6E32 /* VideoCell.swift */,
 				AA2ED5332C638134009F6E32 /* LinkCell.swift */,
 				AA2ED5372C63C853009F6E32 /* SpacerCell.swift */,
+				AA23AAD52C6602D100118F55 /* HeaderCell.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -432,6 +435,7 @@
 				AA2ED5342C638134009F6E32 /* LinkCell.swift in Sources */,
 				AA30423E2C5CD041005BD0D2 /* WebViewModel.swift in Sources */,
 				AA3E96092C49150100080279 /* Species.swift in Sources */,
+				AA23AAD62C6602D100118F55 /* HeaderCell.swift in Sources */,
 				AA3E96072C4914EC00080279 /* Person.swift in Sources */,
 				AA4366BB2C47F50A00712862 /* DetailsViewController.swift in Sources */,
 				AA2ED5302C6380F3009F6E32 /* ProfileImageCell.swift in Sources */,

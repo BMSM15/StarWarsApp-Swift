@@ -1,5 +1,5 @@
 //
-//  TabBarController.swift
+//  StarWarsCell.swift
 //  StarWarsApp
 //
 //  Created by Bruno Martins on 17/07/2024.

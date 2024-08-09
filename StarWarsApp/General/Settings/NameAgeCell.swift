@@ -56,7 +56,7 @@ class NameAgeCell: UICollectionViewCell {
 //section 1 :  "User data"
 //section 3 : "Links"
 
-// Attributed text na celula nameAndAge
+// Attributed text na celula nameAndAge --
 
 // Adicionar error view controller nas Settings
 

@@ -8,6 +8,7 @@
 import UIKit
 
 class LinkCell: UICollectionViewCell {
+    let containerView = UIView()
     let titleLabel = UILabel()
 
     override init(frame: CGRect) {
@@ -21,12 +22,16 @@ class LinkCell: UICollectionViewCell {
 
     private func setupViews() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(containerView)
         contentView.addSubview(titleLabel)
         
-        titleLabel.pinTop(to: contentView, constant: 10)
-        titleLabel.pinLeading(to: contentView, constant: 10)
-        titleLabel.centerHorizontally(to: contentView)
-        titleLabel.backgroundColor = .gray
+        containerView.pin(to: contentView)
+        titleLabel.pinLeading(to: containerView, constant: 10)
+        titleLabel.pinTrailing(to: containerView, constant: 10)
+        
+        titleLabel.centerHorizontally(to: containerView)
+        titleLabel.centerVertically(to: containerView)
+        containerView.backgroundColor = .gray
         titleLabel.textColor = .white
         titleLabel.textAlignment = .center
         contentView.layer.masksToBounds = true

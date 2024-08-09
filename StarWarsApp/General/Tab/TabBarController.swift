@@ -67,6 +67,10 @@ extension TabBarController: DetailsViewControllerDelegate {
 }
 
 extension TabBarController: SettingsViewControllerDelegate {
+    func settingsviewControllerNeedToGoHome(_ viewController: SettingsViewController) {
+        self.selectedIndex = 0
+    }
+    
     func settingsviewController(_ viewController: SettingsViewController, needsToOpenLink link: Link) {
         guard let url = URL(string: link.url) else {
             let alert = UIAlertController(
@@ -95,11 +99,11 @@ extension TabBarController: SettingsViewControllerDelegate {
         webViewController.delegate = self
         
         switch link.openMode {
-        case .internal: // Adjust this case if you have an enum
+        case .internal:
             settingsNavController.pushViewController(webViewController, animated: true)
-        case .modal: // Adjust this case if you have an enum
+        case .modal:
             present(webViewController, animated: true, completion: nil)
-        case .external: // Adjust this case if you have an enum
+        case .external:
             UIApplication.shared.open(url)
         }
     }

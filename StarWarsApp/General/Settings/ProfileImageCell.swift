@@ -23,7 +23,7 @@ class ProfileImageCell: UICollectionViewCell {
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(profileImageView)
         
-        profileImageView.pinSafeAreaTop(to: contentView, constant: 10)
+        profileImageView.centerVertically(to: contentView)
         profileImageView.centerHorizontally(to: contentView)
         profileImageView.widthEqual(to: contentView, multiplier: 0.3)
         profileImageView.heightEqual(to: contentView, multiplier: 1)
