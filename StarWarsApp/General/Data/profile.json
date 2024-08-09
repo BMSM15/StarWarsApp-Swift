@@ -3,6 +3,10 @@
 	"name": "Bruno Martins",
 	"birthdate": "15-07-2002",
 	"videoURL": "https://videodelivery.net/e579b09022014f4be804adaa03650a04/manifest/video.m3u8",
+    "images": ["https://images.pexels.com/photos/255379/pexels-photo-255379.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+        "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+        "https://images.pexels.com/photos/1076039/pexels-photo-1076039.jpeg",
+        "https://images.pexels.com/photos/688574/pexels-photo-688574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"],
 	"links": [
 		{
 			"title": "GitHub",

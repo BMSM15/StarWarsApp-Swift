@@ -52,14 +52,12 @@ class NameAgeCell: UICollectionViewCell {
     }
 }
 
-// Colocar headers nas Settings:
-//section 1 :  "User data"
-//section 3 : "Links"
+// Quando a secção não tem título, não ter altura
 
-// Attributed text na celula nameAndAge --
-
-// Adicionar error view controller nas Settings
+// Colocar um inset no fundo da collectionView
 
 // Usar estruturas de dados na criaçao do data source das Settings
 
-// Usar didSelect da collectionView para abrir os links
+// Secção Galeria com grid de 3 elementos por linha
+
+// Ao clicar imagem, abrir slideshow com todas as imagens usando um UIPageViewController e um UIPageControl, e posicionar o slideshow na imagem clicada;

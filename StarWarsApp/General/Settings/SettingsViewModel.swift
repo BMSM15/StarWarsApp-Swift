@@ -7,31 +7,30 @@
 
 import Foundation
 
-enum SectionItems {
+struct Section {
+    let title: String?
+    let items: [SectionItem]
+}
+
+enum SectionItem {
     case profileImage(url: URL)
     case nameAndAge(name : String, age: Int)
     case video(url : URL)
-    case links([Link])
-    
-    var itemCount: Int {
-           switch self {
-           case .profileImage, .nameAndAge, .video:
-               return 1
-           case .links(let links):
-               return links.count
-           }
-       }
+    case link(Link)
 }
 
+struct Naming {
+    let names: [String]
+}
 
 class SettingsViewModel {
     
-    //MARK: Variables
+    // MARK: - Variables
     
     var user: User?
-    var sections: [SectionItems] = []
+    var sections: [Section] = []
     
-    //MARK: Fetch Data
+    // MARK: - Fetch Data
     
     func fetchSettings(completion: @escaping () -> Void) {
         guard let url = Bundle.main.url(forResource: "profile", withExtension: "json") else {
@@ -44,42 +43,57 @@ class SettingsViewModel {
             let decoder = JSONDecoder()
             
             self.user = try decoder.decode(User.self, from: data)
-            if var imageURL = user?.imageURL {
-                sections.append(.profileImage(url: URL(string: imageURL)!))
+                        
+            
+            if let imageURL = user?.imageURL, let url = URL(string: imageURL) {
+                let profileImageSection = Section(title: nil, items: [.profileImage(url: url)])
+                sections.append(profileImageSection)
             }
-            if var name = user?.name, let age = calculateAge(from: user!.birthdate){
-                sections.append(.nameAndAge(name: name, age: age))
+            
+            if let user = user,
+               let age = calculateAge(from: user.birthdate) {
+                let nameAndAgeSection = Section(title: "User Data", items: [.nameAndAge(name: user.name, age: age)])
+                sections.append(nameAndAgeSection)
             }
-            if var videoURL = user?.videoURL {
-                sections.append(.video(url: URL(string: videoURL)!))
+            
+            if let videoURL = user?.videoURL, let url = URL(string: videoURL) {
+                let videoSection = Section(title: nil, items: [.video(url: url)])
+                sections.append(videoSection)
             }
-            if var links = user?.links {
-                sections.append(.links(links))
+            
+            if let links = user?.links {
+                let arrayLinks: [SectionItem] = links.map {
+                    return .link($0)
+                }
+                sections.append(Section(title: "Links", items: arrayLinks))
             }
-            completion()
-        } catch {
-            print("Failed to decode profile.json: \(error.localizedDescription)")
+            
+                completion()
+            } catch {
+                print("Failed to decode profile.json: \(error.localizedDescription)")
+            }
+        }
+        
+        // MARK: - Functions
+        
+        func calculateAge(from birthdateString: String) -> Int? {
+            let formatter = DateFormatter.shortDate
+            guard let birthdate = formatter.date(from: birthdateString) else {
+                return nil
+            }
+            let calendar = Calendar.current
+            let ageComponents = calendar.dateComponents([.year], from: birthdate, to: Date())
+            return ageComponents.year
         }
     }
     
-    func calculateAge(from birthdateString: String) -> Int? {
-        let formatter = DateFormatter.shortDate
-        guard let birthdate = formatter.date(from: birthdateString) else {
-            return nil
-        }
-        let calendar = Calendar.current
-        let ageComponents = calendar.dateComponents([ .year ], from: birthdate, to: Date())
-        return ageComponents.year
+    // MARK: - Extensions
+    
+    extension DateFormatter {
+        static let shortDate: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "dd-MM-yyyy"
+            return formatter
+        }()
     }
-}
-
-//MARK: Extensions
-
-extension DateFormatter {
-    static let shortDate: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd-MM-yyyy"
-        return formatter
-    }()
-}
-
+    
