@@ -124,7 +124,7 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
             return UICollectionReusableView()
         }
 
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "HeaderCell", for: indexPath) as! HeaderCell
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CellIndentifier.headerCell, for: indexPath) as! HeaderCell
         header.label.text = viewModel.sections[indexPath.section].title
         return header
     }
@@ -147,16 +147,16 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         
         switch item {
         case .profileImage:
-            return CGSize(width: width, height: width * 0.30) // Example height for profile image
+            return CGSize(width: width, height: width * 0.30)
             
         case .nameAndAge:
-            return CGSize(width: width, height: 60) // Example height for name and age
+            return CGSize(width: width, height: 60)
             
         case .video:
-            return CGSize(width: width, height: 220) // Example height for video
+            return CGSize(width: width, height: 220)
             
         case .link:
-            return CGSize(width: width, height: 50) // Example height for links
+            return CGSize(width: width, height: 50)
         }
     }
 
