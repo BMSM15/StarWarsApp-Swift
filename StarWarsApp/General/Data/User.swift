@@ -8,10 +8,11 @@
 import Foundation
 
 struct User: Codable {
-    let name: String
     let imageURL: String
+    let name: String
     let birthdate: String
     let videoURL: String
+    let images: [String]
     let links: [Link]
 }
 

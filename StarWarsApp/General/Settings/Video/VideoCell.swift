@@ -27,11 +27,10 @@ class VideoCell: UICollectionViewCell {
     private func setupViews() {
         videoContainerView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(videoContainerView)
-        videoContainerView.pinTop(to: contentView, constant: 10)
-        videoContainerView.pinLeading(to: contentView, constant: 10)
-        videoContainerView.pinTrailing(to: contentView, constant: 10)
-        videoContainerView.pinBottom(to: contentView, constant: 10)
-        videoContainerView.heightEqualsToWidth(multiplier: 9.0 / 16.0)
+        videoContainerView.pinTop(to: contentView)
+        videoContainerView.pinLeading(to: contentView)
+        videoContainerView.pinTrailing(to: contentView)
+        videoContainerView.pinBottom(to: contentView)
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(playerDidFinishPlaying(_:)),

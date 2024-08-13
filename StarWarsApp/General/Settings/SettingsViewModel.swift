@@ -16,6 +16,7 @@ enum SectionItem {
     case profileImage(url: URL)
     case nameAndAge(name : String, age: Int)
     case video(url : URL)
+    case image(URL)
     case link(Link)
 }
 
@@ -61,6 +62,19 @@ class SettingsViewModel {
                 sections.append(videoSection)
             }
             
+            if let images = user?.images {
+                let arrayImages: [SectionItem] = images.compactMap {
+                    if let url = URL(string: $0) {
+                        return .image(url)
+                    } else {
+                        return nil
+                    }
+                }
+                if !arrayImages.isEmpty {
+                    sections.append(Section(title: "Gallery", items: arrayImages))
+                }
+            }
+
             if let links = user?.links {
                 let arrayLinks: [SectionItem] = links.map {
                     return .link($0)
