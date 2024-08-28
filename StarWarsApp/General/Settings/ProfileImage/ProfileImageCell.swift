@@ -8,7 +8,7 @@
 import UIKit
 
 class ProfileImageCell: UICollectionViewCell {
-    let profileImageView = UIImageView()
+    let profileImageView = ImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -17,6 +17,11 @@ class ProfileImageCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        profileImageView.cancel()
     }
     
     private func setupViews() {
@@ -30,7 +35,8 @@ class ProfileImageCell: UICollectionViewCell {
     }
     
     func configure(with imageUrl: URL) {
-        profileImageView.load(url: imageUrl)
+        profileImageView.setImage(url: imageUrl)
     }
 }
+
 

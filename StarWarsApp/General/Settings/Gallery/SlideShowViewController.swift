@@ -11,15 +11,15 @@ class SlideShowViewController: UIPageViewController, UIPageViewControllerDataSou
     
     // MARK: - Variables
     
-    private var imageURLs: [URL]
+    private var imageDetails: [(url: URL, width: Int, height: Int)]
     let pageControl = UIPageControl()
     let initialPage: Int
     var currentPage: Int
     
     // MARK: - Initialization
     
-    init(imageURLs: [URL], initialPage: Int) {
-        self.imageURLs = imageURLs
+    init(imageDetails: [(url: URL, width: Int, height: Int)], initialPage: Int) {
+        self.imageDetails = imageDetails
         self.initialPage = initialPage
         self.currentPage = initialPage
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
@@ -32,6 +32,7 @@ class SlideShowViewController: UIPageViewController, UIPageViewControllerDataSou
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         setup()
         setupPageControl()
     }
@@ -42,12 +43,13 @@ class SlideShowViewController: UIPageViewController, UIPageViewControllerDataSou
         dataSource = self
         delegate = self
         
-        let slideViewController = viewController(at: initialPage)
-        setViewControllers([slideViewController], direction: .forward, animated: true, completion: nil)
+        if let slideViewController = viewController(at: initialPage) {
+            setViewControllers([slideViewController], direction: .forward, animated: true, completion: nil)
+        }
     }
     
     private func setupPageControl() {
-        pageControl.numberOfPages = imageURLs.count
+        pageControl.numberOfPages = imageDetails.count
         pageControl.currentPage = initialPage
         pageControl.pageIndicatorTintColor = .gray
         pageControl.currentPageIndicatorTintColor = .black
@@ -58,27 +60,31 @@ class SlideShowViewController: UIPageViewController, UIPageViewControllerDataSou
         pageControl.centerHorizontally(to: view)
     }
     
-    // MARK: - UIPageViewControllerDelegate
-    
-    func viewController(at index: Int) -> UIViewController {
-        let imageVC = GalleryImageViewController()
-        imageVC.imageURL = imageURLs[index]
-        imageVC.pageIndex = index
-        return imageVC
-    }
+    // MARK: - UIPageViewControllerDataSource
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let viewController = viewController as? GalleryImageViewController else { return nil }
-        let index = viewController.pageIndex
-        return index == 0 ? nil : self.viewController(at: index - 1)
+        let previousIndex = viewController.pageIndex - 1
+        return self.viewController(at: previousIndex)
     }
-    
+
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let viewController = viewController as? GalleryImageViewController else { return nil }
-        let index = viewController.pageIndex
-        return index == imageURLs.count - 1 ? nil : self.viewController(at: index + 1)
+        let nextIndex = viewController.pageIndex + 1
+        return self.viewController(at: nextIndex)
     }
-    
+
+    private func viewController(at index: Int) -> GalleryImageViewController? {
+        guard index >= 0, index < imageDetails.count else { return nil }
+        let imageDetail = imageDetails[index]
+        let imageVC = GalleryImageViewController()
+        imageVC.imageURL = imageDetail.url
+        imageVC.pageIndex = index
+        imageVC.imageWidth = imageDetail.width
+        imageVC.imageHeight = imageDetail.height
+        return imageVC
+    }
+
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if completed {
             if let currentVC = pageViewController.viewControllers?.first as? GalleryImageViewController {

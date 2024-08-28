@@ -11,32 +11,26 @@ class GalleryImageViewController: UIViewController {
     
     // MARK: - Variables
     
-    var imageView = UIImageView()
     var imageURL: URL?
     var pageIndex: Int = 0
+    var imageWidth: Int = 0
+    var imageHeight: Int = 0
+    
+    private let imageView = UIImageView()
     
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
-        imageView.image = nil
         super.viewDidLoad()
-        imageView.backgroundColor = .white
-        
-        imageView.contentMode = .scaleAspectFit
-        imageView.frame = view.bounds
         view.addSubview(imageView)
-        
-        if let imageURL = imageURL {
-            let task = URLSession.shared.dataTask(with: imageURL) { [weak self] data, response, error in
-                if let data = data, let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        self?.imageView.image = image
-                    }
-                } else {
-                    print("Failed to load image: \(error?.localizedDescription ?? "Unknown error")")
-                }
-            }
-            task.resume()
-        }
+        imageView.frame = view.bounds
+        imageView.contentMode = .scaleAspectFit
+        imageView.backgroundColor = .white
+        loadImage()
+    }
+    
+    private func loadImage() {
+        guard let url = imageURL else { return }
+        imageView.loadImage(from: url)
     }
 }

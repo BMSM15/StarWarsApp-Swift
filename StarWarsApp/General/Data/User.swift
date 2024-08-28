@@ -12,8 +12,14 @@ struct User: Codable {
     let name: String
     let birthdate: String
     let videoURL: String
-    let images: [String]
+    let images: [ImageInfo]
     let links: [Link]
+}
+
+struct ImageInfo: Codable {
+    let url: String
+    let width: Int
+    let height: Int
 }
 
 struct Link: Codable {

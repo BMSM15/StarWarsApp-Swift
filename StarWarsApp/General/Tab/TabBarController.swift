@@ -29,7 +29,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     private func setupTabs() {
         let homeViewModel = ViewModel(services: services)
         let viewController = ViewController(viewModel: homeViewModel)
-        let settingsViewModel = SettingsViewModel()
+        let settingsViewModel = SettingsViewModel(email: "")
         let settingsViewController = SettingsViewController(viewModel: settingsViewModel)
         
         settingsViewController.delegate = self
@@ -116,3 +116,27 @@ extension TabBarController : WebViewControllerDelegate {
         self.settingsNavController.popViewController(animated: true)
     }
 }
+
+extension TabBarController: LoginViewControllerDelegate {
+    func loginViewControllerNeedToGoHome(_ viewController: LoginViewController, withEmail email: String) {
+        if let settingsVC = settingsNavController.viewControllers.first as? SettingsViewController {
+            settingsVC.viewModel.email = email
+        }
+        viewController.dismiss(animated: false, completion: nil)
+    }
+}
+
+extension TabBarController: OnBoardingViewControllerDelegate {
+    func onboardingDidFinish(_ controller: OnBoardingViewController) {
+        controller.dismiss(animated: false) { [weak self] in
+            guard let self = self else { return }
+            
+            let loginViewModel = LoginViewModel()
+            let loginController = LoginViewController(viewModel: loginViewModel)
+            loginController.delegate = self
+            loginController.modalPresentationStyle = .fullScreen
+            self.present(loginController, animated: false, completion: nil)
+        }
+    }
+}
+

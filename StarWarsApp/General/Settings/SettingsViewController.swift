@@ -17,21 +17,22 @@ protocol SettingsViewControllerDelegate: AnyObject {
     func settingsviewControllerNeedToGoHome (_ viewController: SettingsViewController)
 }
 
-class SettingsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class SettingsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, CustomCollectionViewLayoutDelegate {
     
     // MARK: - Variables
     
-    let collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 100
-        layout.minimumInteritemSpacing = 100
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+    
+    lazy var collectionView: UICollectionView = {
+        let customLayout = CustomCollectionViewLayout()
+        customLayout.delegate = self
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: customLayout)
+        collectionView.collectionViewLayout = customLayout
         collectionView.backgroundColor = .white
-        
+      
         return collectionView
     }()
     
-    private let viewModel: SettingsViewModel
+    let viewModel: SettingsViewModel
     weak var delegate: SettingsViewControllerDelegate?
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     let errorViewController = ErrorViewController()
@@ -54,12 +55,12 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         view.backgroundColor = .white
         setupCollectionView()
         loadSettings()
-        setupActions()
     }
     
     // MARK: - Setup
     
     private func setupCollectionView() {
+        view.addSubview(collectionView)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(NameAgeCell.self, forCellWithReuseIdentifier: "NameAgeCell")
@@ -68,38 +69,20 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         collectionView.register(VideoCell.self, forCellWithReuseIdentifier: "VideoCell")
         collectionView.register(LinkCell.self, forCellWithReuseIdentifier: "LinkCell")
         collectionView.register(HeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderCell")
-        view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.pin(to: view)
-        
-        
-    }
-    
-    private func setupActions() {
-        errorViewController.retryButtonHandler = { [weak self] in
-            self?.loadSettings()
-            self?.hideErrorView()
-        }
-        errorViewController.goBackButtonHandler = { [weak self] in
-            self?.delegate?.settingsviewControllerNeedToGoHome(self!)
-        }
-    }
-    
-    func showErrorView() {
-        self.add(errorViewController)
-    }
-    
-    func hideErrorView() {
-        remove(errorViewController)
+        print("💡 setupCollectionView")
     }
     
     // MARK: - Loading View
     
     func loadSettings() {
         activityIndicator.startAnimating()
+        
         viewModel.fetchSettings {
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
+                print("💡 fetchSettings")
             }
             self.activityIndicator.stopAnimating()
         }
@@ -125,30 +108,30 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIndentifier.profileImageCell, for: indexPath) as! ProfileImageCell
             cell.configure(with: url)
             return cell
-            
+        
         case .nameAndAge(let name, let age):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIndentifier.nameAgeCell, for: indexPath) as! NameAgeCell
             cell.configure(name: name, age: age)
             return cell
-            
+        
         case .video(let url):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIndentifier.videoCell, for: indexPath) as! VideoCell
             cell.configure(with: url)
             return cell
-            
+        
         case .link(let link):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIndentifier.linkCell, for: indexPath) as! LinkCell
             cell.configure(with: link.title)
             return cell
-            
-        case .image(let imageURL):
+        
+        case .image(let imageURL, let width, let height):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIndentifier.galleryCell, for: indexPath) as! GalleryCell
-            cell.configure(with: imageURL)
+            cell.configure(with: imageURL, width: width, height: height)
             return cell
-            
         }
     }
-        
+
+    
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         cell.debug(color: .red)
     }
@@ -168,9 +151,11 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let title = viewModel.sections[section].title
         if title == nil {
-            return CGSize(width: collectionView.frame.width, height: 10)
+            return .zero
         } else {
-            return CGSize(width: collectionView.frame.width, height: 40)
+            let sectionInset = self.collectionView(collectionView, layout: collectionViewLayout, insetForSectionAt: section)
+            let sectionWidth = collectionView.frame.width - sectionInset.left - sectionInset.right
+            return CGSize(width: sectionWidth, height: 40)
         }
     }
     
@@ -188,13 +173,57 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, withSectionWidth sectionWidth: CGFloat, itemTypeAt indexPath: IndexPath) -> CustomCollectionViewLayoutItemType {
+        
+        let section = viewModel.sections[indexPath.section]
+        let item = section.items[indexPath.item]
+
+        switch item {
+        case .profileImage:
+            return .row(height: sectionWidth * 0.3)
+            
+        case .nameAndAge:
+            return .row(height: 60)
+            
+        case .video:
+            return .row(height: 220)
+            
+        case .link:
+            return .row(height: 50)
+            
+        case .image(_, let numberOfColumns, let numberOfRows):
+            
+            return .grid(numberOfColumns: numberOfColumns, numberOfRows: numberOfRows)
+//            let numberOfColumns: CGFloat = 2
+//            let numberOfColumnsForItem = CGFloat(numberOfColumnsForItem)
+//            let numberOfRowsForItem = CGFloat(numberOfRowsForItem)
+//            
+//            let sectionInset = self.collectionView(collectionView, layout: collectionViewLayout, insetForSectionAt: indexPath.section)
+//            let lineSpacing = self.collectionView(collectionView, layout: collectionViewLayout, minimumLineSpacingForSectionAt: indexPath.section)
+//            let interItemSpacing = self.collectionView(collectionView, layout: collectionViewLayout, minimumInteritemSpacingForSectionAt: indexPath.section)
+//            
+//            let columnWidth: CGFloat = {
+//                var availableWidth: CGFloat = collectionView.bounds.width
+//                availableWidth -= (sectionInset.left + sectionInset.right)
+//                availableWidth -= (numberOfColumns - 1) * interItemSpacing
+//                return availableWidth / numberOfColumns
+//            }()
+//            
+//                           
+//            return CGSize(width: columnWidth * numberOfColumnsForItem + (numberOfColumnsForItem - 1) * interItemSpacing,
+//                          height: columnWidth * numberOfRowsForItem + (numberOfRowsForItem - 1) * lineSpacing)
+        }
+
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let sectionInset = self.collectionView(collectionView, layout: collectionViewLayout, insetForSectionAt: indexPath.section)
         let sectionWidth = collectionView.frame.width - sectionInset.left - sectionInset.right
+        let sectionHeight = collectionView.frame.height - sectionInset.top - sectionInset.bottom
         let section = viewModel.sections[indexPath.section]
         let item = section.items[indexPath.item]
-        
+
         switch item {
         case .profileImage:
             return CGSize(width: sectionWidth, height: sectionWidth * 0.30)
@@ -208,12 +237,26 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         case .link:
             return CGSize(width: sectionWidth, height: 50)
             
-        case .image:
+        case .image(_, let numberOfColumnsForItem, let numberOfRowsForItem):
             
-            let numberOfColumns: CGFloat = 3
+            let numberOfColumns: CGFloat = 2
+            let numberOfColumnsForItem = CGFloat(numberOfColumnsForItem)
+            let numberOfRowsForItem = CGFloat(numberOfRowsForItem)
+            
+            let sectionInset = self.collectionView(collectionView, layout: collectionViewLayout, insetForSectionAt: indexPath.section)
             let lineSpacing = self.collectionView(collectionView, layout: collectionViewLayout, minimumLineSpacingForSectionAt: indexPath.section)
-            let itemSize = (sectionWidth - (numberOfColumns - 1) * lineSpacing) / numberOfColumns
-            return CGSize(width: itemSize, height: itemSize)
+            let interItemSpacing = self.collectionView(collectionView, layout: collectionViewLayout, minimumInteritemSpacingForSectionAt: indexPath.section)
+            
+            let columnWidth: CGFloat = {
+                var availableWidth: CGFloat = collectionView.bounds.width
+                availableWidth -= (sectionInset.left + sectionInset.right)
+                availableWidth -= (numberOfColumns - 1) * interItemSpacing
+                return availableWidth / numberOfColumns
+            }()
+            
+                           
+            return CGSize(width: columnWidth * numberOfColumnsForItem + (numberOfColumnsForItem - 1) * interItemSpacing,
+                          height: columnWidth * numberOfRowsForItem + (numberOfRowsForItem - 1) * lineSpacing)
         }
     }
     
@@ -227,21 +270,21 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
             break
             
         case .image:
-            let imageURLs = section.items.compactMap { item -> URL? in
-                if case .image(let url) = item {
-                    return url
+            let imageDetails: [(url: URL, width: Int, height: Int)] = section.items.compactMap { item in
+                if case .image(let url, let width, let height) = item {
+                    return (url, width, height)
                 }
                 return nil
             }
             
-            let slideshowVC = SlideShowViewController(imageURLs: imageURLs, initialPage: indexPath.item)
+            let slideshowVC = SlideShowViewController(imageDetails: imageDetails, initialPage: indexPath.item)
             present(slideshowVC, animated: true, completion: nil)
-            
             
         case .link(let link):
             delegate?.settingsviewController(self, needsToOpenLink: link)
         }
     }
+    
 }
 
 
@@ -266,3 +309,4 @@ extension UIView {
         layer.borderColor = color.cgColor
     }
 }
+

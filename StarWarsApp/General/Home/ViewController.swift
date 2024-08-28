@@ -94,10 +94,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         collectionView.dataSource = self
         collectionView.register(StarWarsCell.self, forCellWithReuseIdentifier: "StarWarsCell")
         view.addSubview(collectionView)
-        collectionView.pinTop(to: view)
-        collectionView.pinBottom(to: view)
-        collectionView.pinLeading(to: view)
-        collectionView.pinTrailing(to: view)
+        collectionView.pin(to: view)
     }
     
     private func setupSearchController() {
@@ -115,10 +112,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         activityIndicator.hidesWhenStopped = true
         view.addSubview(activityIndicator)
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
+        activityIndicator.centerVertically(to: view)
+        activityIndicator.centerHorizontally(to: view)
     }
     
     // MARK: - Load Data

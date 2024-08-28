@@ -1,0 +1,20 @@
+{
+    "cards": [
+        {
+            "title": "Multi-channel payment",
+            "text": "Allows you to pay online at all aplicattions and websites that accept Mastercard cards",
+            "image": "Card_1"
+        },
+        {
+            "title": "All free",
+            "text": "Allows you to pay online at all aplicattions and websites that accept Mastercard cards",
+            "image": "Card_2"
+        },
+        {
+            "title": "Security",
+            "text": "Allows you to pay online at all aplicattions and websites that accept Mastercard cards",
+            "image": "Card_3"
+        }
+    ]
+}
+
