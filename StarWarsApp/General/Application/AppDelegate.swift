@@ -1,57 +1,57 @@
-//
-//  AppDelegate.swift
-//  StarWarsApp
-//
-//  Created by Bruno Martins on 17/07/2024.
-//
-
 import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    
     let services: Services = .init()
     let tabBarController = TabBarController()
+    let loginViewModel = LoginViewModel()
     
+    public struct UserDefaultsKeys {
+        static let launchCount = "launchCount"
+        static let rememberedEmail = "rememberedEmail"
+    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        struct UserDefaultsKeys {
-            static let launchCount = "launchCount"
-        }
-        
         window = UIWindow(frame: UIScreen.main.bounds)
-        let tabBarController = TabBarController()
-        window?.rootViewController = tabBarController
-        window?.makeKeyAndVisible()
         
-        let launchCount = UserDefaults.standard.integer(forKey: UserDefaultsKeys.launchCount)
-        let newLaunchCount = 10//launchCount + 1
-        UserDefaults.standard.set(newLaunchCount, forKey: UserDefaultsKeys.launchCount)
+        let launchCount = UserDefaults.standard.integer(forKey: UserDefaultsKeys.launchCount) + 1
+        UserDefaults.standard.set(launchCount, forKey: UserDefaultsKeys.launchCount)
         
-        if shouldShowOnboarding(launchCount: newLaunchCount) {
-            print("\(newLaunchCount)")
+        print("LaunchCount - \(launchCount)")
+        
+        // Check if the onboarding screen should be shown
+        if shouldShowOnboarding(launchCount: launchCount) {
             let onBoardingViewModel = OnBoardingViewModel()
-            let onBoardingController = OnBoardingViewController(viewModel: onBoardingViewModel)
-            onBoardingController.delegate = tabBarController
-            onBoardingController.modalPresentationStyle = .fullScreen
-            tabBarController.present(onBoardingController, animated: false, completion: nil)
+            let onBoardingViewController = OnBoardingViewController(viewModel: onBoardingViewModel)
+            onBoardingViewController.delegate = tabBarController
+            window?.rootViewController = onBoardingViewController
         } else {
-            let loginViewModel = LoginViewModel()
-            print("\(newLaunchCount)")
-            let loginController = LoginViewController(viewModel: loginViewModel)
-            loginController.delegate = tabBarController
-            loginController.modalPresentationStyle = .fullScreen
-            tabBarController.present(loginController, animated: false, completion: nil)
+            let savedEmail = UserDefaults.standard.string(forKey: UserDefaultsKeys.rememberedEmail)
+            tabBarController.userEmail = savedEmail
+            tabBarController.setupTabs()
+            window?.rootViewController = tabBarController
         }
         
+        window?.makeKeyAndVisible()
         return true
     }
     
-    
     private func shouldShowOnboarding(launchCount: Int) -> Bool {
         return launchCount % 10 == 0
+    }
+    
+    func switchToTabBarController() {
+        window?.rootViewController = tabBarController
+        window?.makeKeyAndVisible()
+    }
+    
+    func presentLoginViewController() {
+        let loginController = LoginViewController(viewModel: loginViewModel)
+        loginController.delegate = tabBarController
+        window?.rootViewController = loginController
+        window?.makeKeyAndVisible()
     }
 }

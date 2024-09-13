@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct Section {
     let title: String?
@@ -18,6 +19,7 @@ enum SectionItem {
     case video(url: URL)
     case image(url: URL, width: Int, height: Int)
     case link(Link)
+    case logout
 }
 
 
@@ -29,18 +31,15 @@ class SettingsViewModel {
     var userLogin: UserLogin?
     var sections: [Section] = []
     var email: String
-        
-    // MARK: - Initializer
-    
+
+    // Initialize the ViewModel with the email
     init(email: String) {
         self.email = email
     }
     
-    
     // MARK: - Fetch Data
     
     func fetchSettings(completion: @escaping () -> Void) {
-
         
         // Load user data from Keychain using the retrieved email
         if let loadedUser = KeychainHelper.shared.loadUser(email: email) {
@@ -101,6 +100,9 @@ class SettingsViewModel {
                 }
                 sections.append(Section(title: "Links", items: arrayLinks))
             }
+            
+            let logoutSection = Section(title: nil, items: [.logout])
+               sections.append(logoutSection)
             
             completion()
         } catch {

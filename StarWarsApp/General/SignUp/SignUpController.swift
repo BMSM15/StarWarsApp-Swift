@@ -1,32 +1,32 @@
 //
-//  LoginViewController.swift
+//  SignUpController.swift
 //  StarWarsApp
 //
-//  Created by Bruno Martins on 21/08/2024.
+//  Created by Bruno Martins on 10/09/2024.
 //
 
 import UIKit
 
-protocol LoginViewControllerDelegate: AnyObject {
-    func loginViewControllerNeedToGoHome(_ viewController: LoginViewController, withEmail email: String)
+protocol SignUpViewControllerDelegate: AnyObject {
+    func signUpViewControllerDidSignUp(_ viewController: SignUpViewController, withEmail: String)
 }
 
-class LoginViewController: UIViewController {
+class SignUpViewController: UIViewController {
     
     // MARK: - Variables
     
-    private let viewModel: LoginViewModel
-    weak var delegate: LoginViewControllerDelegate?
-    let loginButton: Button = Button()
-    let signUpButton: Button = Button()
-    var emailTextField = UITextField()
+    let nameTextField = UITextField()
+    let emailTextField = UITextField()
     let passwordTextField = UITextField()
+    let birthdatePicker = UIDatePicker()
+    let signUpButton: Button = Button()
     let imageView = UIImageView()
-    private var signUpViewController: SignUpViewController?
+    let viewModel: SignUpViewModel
+    weak var delegate: SignUpViewControllerDelegate?
     
     // MARK: - Initialization
     
-    init(viewModel: LoginViewModel) {
+    init(viewModel: SignUpViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -41,31 +41,27 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-        let allUsers = KeychainHelper.shared.retrieveAllUsers()
-
-        for user in allUsers {
-            print("Name: \(user.name)")
-            print("Birthdate: \(user.birthdate)")
-            print("Email: \(user.email)")
-            print("Password: \(user.password)")
-            print("-----------")
-        }
     }
     
     // MARK: - Setup
     
     private func setupView() {
-        title = "Login"
+        title = "SignUp"
         
         view.backgroundColor = .white
+        view.addSubview(nameTextField)
         view.addSubview(emailTextField)
         view.addSubview(passwordTextField)
-        view.addSubview(loginButton)
+        view.addSubview(birthdatePicker)
         view.addSubview(signUpButton)
         view.addSubview(imageView)
         
-       loginButton.setTitle("Login", for: .normal)
-        signUpButton.setTitle("Sign up", for: .normal)
+        birthdatePicker.datePickerMode = .date
+        signUpButton.setTitle("Sign Up", for: .normal)
+        
+        nameTextField.setPadding(10)
+        nameTextField.placeholder = "Name"
+        nameTextField.setPlaceholderTextColor(.white)
         
         emailTextField.setPadding(10)
         emailTextField.placeholder = "Email"
@@ -74,22 +70,36 @@ class LoginViewController: UIViewController {
         passwordTextField.setPadding(10)
         passwordTextField.placeholder = "Password"
         passwordTextField.setPlaceholderTextColor(.white)
-        
-        emailTextField.translatesAutoresizingMaskIntoConstraints = false
-        passwordTextField.translatesAutoresizingMaskIntoConstraints = false
-        loginButton.translatesAutoresizingMaskIntoConstraints = false
-        signUpButton.translatesAutoresizingMaskIntoConstraints = false
     }
     
     private func setupConstraints() {
         imageView.contentMode = .scaleAspectFit
         imageView.pinTop(to: view)
         imageView.image = UIImage(named: "SWIcon")
-        imageView.pinLeading(to: view, constant: 50)
-        imageView.pinTrailing(to: view, constant: 50)
+        imageView.pinBottom(to: view, constant: 400)
+        imageView.pinLeading(to: view, constant: 90)
+        imageView.pinTrailing(to: view, constant: 90)
+    
+        nameTextField.centerHorizontally(to: view)
+        nameTextField.pinTopToBottom(to: imageView)
+        nameTextField.pinTrailing(to: view, constant: 50)
+        nameTextField.pinLeading(to: view, constant: 50)
+        nameTextField.backgroundColor = .gray
+        nameTextField.height(constant: 40)
+        nameTextField.layer.cornerRadius = 10
+        nameTextField.layer.masksToBounds = true
+        
+        birthdatePicker.centerHorizontally(to: view)
+        birthdatePicker.pinTopToBottom(to: nameTextField, constant: 30)
+        birthdatePicker.pinTrailing(to: view, constant: 50)
+        birthdatePicker.pinLeading(to: view, constant: 50)
+        birthdatePicker.backgroundColor = .gray
+        birthdatePicker.height(constant: 40)
+        birthdatePicker.layer.cornerRadius = 10
+        birthdatePicker.layer.masksToBounds = true
         
         emailTextField.centerHorizontally(to: view)
-        emailTextField.pinTopToBottom(to: imageView)
+        emailTextField.pinTopToBottom(to: birthdatePicker, constant: 30)
         emailTextField.pinTrailing(to: view, constant: 50)
         emailTextField.pinLeading(to: view, constant: 50)
         emailTextField.backgroundColor = .gray
@@ -108,50 +118,33 @@ class LoginViewController: UIViewController {
         passwordTextField.autocapitalizationType = .none
         passwordTextField.isSecureTextEntry = true
         
-        loginButton.setTitleColor(.white, for: .normal)
-        loginButton.backgroundColor = .gray
-        loginButton.pinTopToBottom(to: passwordTextField, constant: 30)
-        loginButton.pinTrailing(to: view, constant: 150)
-        loginButton.pinLeading(to: view, constant: 150)
-        loginButton.layer.cornerRadius = 10
-        loginButton.layer.masksToBounds = true
-        loginButton.actionHandler = { [weak self] _ in
-            self?.handleLogin()
-        }
-        
         signUpButton.setTitleColor(.white, for: .normal)
         signUpButton.backgroundColor = .gray
-        signUpButton.pinTopToBottom(to: loginButton, constant: 20)
+        signUpButton.pinTopToBottom(to: passwordTextField, constant: 30)
         signUpButton.pinTrailing(to: view, constant: 150)
         signUpButton.pinLeading(to: view, constant: 150)
         signUpButton.layer.cornerRadius = 10
         signUpButton.layer.masksToBounds = true
         
         signUpButton.actionHandler = { [weak self] _ in
-            self?.goSignUpButton()
+            self?.handleSignUp()
         }
     }
     
-    // MARK: - Button Actions
+    // MARK: - Actions
     
-    private func handleLogin() {
+    private func handleSignUp() {
+        viewModel.name = nameTextField.text
+        viewModel.birthdate = birthdatePicker.date
         viewModel.email = emailTextField.text
         viewModel.password = passwordTextField.text
         
-        if viewModel.loginUser() {
+        if viewModel.createUser() {
             guard let email = viewModel.email else { return }
-            UserDefaults.standard.set(email, forKey: AppDelegate.UserDefaultsKeys.rememberedEmail)
-            delegate?.loginViewControllerNeedToGoHome(self, withEmail: email)
+            delegate?.signUpViewControllerDidSignUp(self, withEmail: email)
         } else {
-            showError(viewModel.loginErrorMessage)
+            showError(viewModel.signUpErrorMessage)
         }
-    }
-    
-    func goSignUpButton() {
-        let signUpViewModel = SignUpViewModel()
-        let signUpViewController = SignUpViewController(viewModel: signUpViewModel)
-        
-        present(signUpViewController, animated: true, completion: nil)
     }
 
     private func showError(_ message: String) {
@@ -161,6 +154,3 @@ class LoginViewController: UIViewController {
     }
     
 }
-
-
-

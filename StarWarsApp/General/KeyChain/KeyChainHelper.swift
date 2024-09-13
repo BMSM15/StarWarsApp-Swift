@@ -12,6 +12,8 @@ class KeychainHelper {
     
     static let shared = KeychainHelper()
     
+    private let emailKey = "com.starwarsapp.userEmail"
+    
     private init() {}
     
     func saveUser(email: String, user: UserLogin) -> Bool {
@@ -63,7 +65,7 @@ class KeychainHelper {
             return nil
         }
     }
-
+    
     
     func deleteUser(email: String) -> Bool {
         let query: [String: Any] = [
@@ -80,27 +82,53 @@ class KeychainHelper {
         return status == errSecSuccess
     }
     
+    func loadEmail() -> String? {
+        let query = [
+            kSecClass: kSecClassGenericPassword,
+            kSecAttrAccount: "userEmail",
+            kSecReturnData: kCFBooleanTrue!,
+            kSecMatchLimit: kSecMatchLimitOne
+        ] as [String: Any]
+        
+        var result: AnyObject?
+        let status = SecItemCopyMatching(query as CFDictionary, &result)
+        
+        guard status == errSecSuccess, let data = result as? Data else {
+            print("Error loading email from Keychain: \(status)")
+            return nil
+        }
+        
+        return String(data: data, encoding: .utf8)
+    }
+    
     func userExists(email: String) -> Bool {
         return loadUser(email: email) != nil
     }
     
-    func loadEmail() -> String? {
-            let query = [
-                kSecClass: kSecClassGenericPassword,
-                kSecAttrAccount: "userEmail",
-                kSecReturnData: kCFBooleanTrue!,
-                kSecMatchLimit: kSecMatchLimitOne
-            ] as [String: Any]
-            
-            var result: AnyObject?
-            let status = SecItemCopyMatching(query as CFDictionary, &result)
-            
-            guard status == errSecSuccess, let data = result as? Data else {
-                print("Error loading email from Keychain: \(status)")
-                return nil
-            }
-            
-            return String(data: data, encoding: .utf8)
+    func retrieveAllUsers() -> [UserLogin] {
+        let query = [
+            kSecClass: kSecClassGenericPassword,
+            kSecReturnData: kCFBooleanTrue,
+            kSecMatchLimit: kSecMatchLimitAll
+        ] as [String: Any]
+        
+        var dataTypeRef: AnyObject?
+        let status = SecItemCopyMatching(query as CFDictionary, &dataTypeRef)
+        
+        guard status == errSecSuccess, let dataArray = dataTypeRef as? [Data] else {
+            return []
         }
+        
+        var users = [UserLogin]()
+        
+        for data in dataArray {
+            if let jsonString = String(data: data, encoding: .utf8),
+               let user = UserLogin.from(jsonString: jsonString) {
+                users.append(user)
+            }
+        }
+        
+        return users
+    }
 }
 

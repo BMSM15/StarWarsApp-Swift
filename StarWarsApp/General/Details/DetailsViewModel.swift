@@ -17,20 +17,20 @@ class DetailsViewModel {
     let services : Services
     
     // MARK: - Initialization
-
+    
     init(person: Person, services: Services) {
         self.services = services
         self.person = person
     }
-
+    
     // MARK: - Fetch Data
-
+    
     func fetchCharacterDetails(completion: @escaping (CharacterDetails?) -> Void) {
-
+        
         let group = DispatchGroup()
         var language: String? = nil
         var vehicles: [Vehicle] = []
-
+        
         if let speciesURL = person.species.first {
             group.enter()
             fetchLanguage(from: speciesURL) { fetchedLanguage in
@@ -38,13 +38,13 @@ class DetailsViewModel {
                 group.leave()
             }
         }
-
+        
         group.enter()
         fetchVehicles {
             vehicles = $0
             group.leave()
         }
-
+        
         group.notify(queue: .main) {
             self.character = CharacterDetails(name: self.person.name,
                                               gender: self.person.gender,
@@ -53,12 +53,12 @@ class DetailsViewModel {
             completion(self.character)
         }
     }
-
+    
     private func fetchVehicles(completion: @escaping ([Vehicle]) -> Void) {
         let group = DispatchGroup()
         var vehicles: [Vehicle] = []
         
-
+        
         person.vehiclesIDs.forEach { vehicleID in
             group.enter()
             services.getVehicle(byID: vehicleID) { result in
@@ -75,7 +75,7 @@ class DetailsViewModel {
             completion(vehicles)
         }
     }
-
+    
     private func fetchLanguage(from id: String, completion: @escaping (String) -> Void) {
         let getData = GetData()
         let services = Services(getData: getData)

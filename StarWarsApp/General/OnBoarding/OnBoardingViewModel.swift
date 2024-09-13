@@ -9,11 +9,17 @@ import Foundation
 
 class OnBoardingViewModel {
     
+    // MARK: - Variables
+    
     private var cards: [OnBoardingCard] = []
+    
+    // MARK: - Initialization
     
     init() {
         loadOnboardingDataFromJSON()
     }
+    
+    // MARK: - Actions
     
     private func loadOnboardingDataFromJSON() {
         if let path = Bundle.main.path(forResource: "onboarding", ofType: "json") {

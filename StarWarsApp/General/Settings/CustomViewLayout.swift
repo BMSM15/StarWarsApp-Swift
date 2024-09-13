@@ -59,8 +59,6 @@ class CustomCollectionViewLayout: UICollectionViewLayout {
             
             var sectionAttributes: [UICollectionViewLayoutAttributes] = []
             
-                       
-            
             let headerSize = delegate!.collectionView(collectionView, layout: self, referenceSizeForHeaderInSection: section)
             
             if headerSize.width > 0,
@@ -105,7 +103,6 @@ class CustomCollectionViewLayout: UICollectionViewLayout {
                     }
                 }()
                 
-                
                 var x = lastFrame.maxX + interitemSpacing
                 var y = lastFrame.minY
                 
@@ -124,11 +121,8 @@ class CustomCollectionViewLayout: UICollectionViewLayout {
                 maxY = max(maxY, attributes.frame.maxY)
                 contentBounds = contentBounds.union(lastFrame)
                 
-                
                 print("🦷 indexPath: \(section)-\(currentIndex) frame: \(lastFrame)")
             }
-            
-            
             
             contentHeight += sectionInset.bottom
                 

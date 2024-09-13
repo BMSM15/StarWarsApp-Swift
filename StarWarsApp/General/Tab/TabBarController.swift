@@ -15,6 +15,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     let services: Services = .init()
     let homeNavController = UINavigationController()
     let settingsNavController = UINavigationController()
+    var userEmail: String?
     
     // MARK: - View Life Cycle
     
@@ -26,10 +27,10 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
     // MARK: - Setup
     
-    private func setupTabs() {
+    func setupTabs() {
         let homeViewModel = ViewModel(services: services)
         let viewController = ViewController(viewModel: homeViewModel)
-        let settingsViewModel = SettingsViewModel(email: "")
+        let settingsViewModel = SettingsViewModel(email: userEmail ?? "")
         let settingsViewController = SettingsViewController(viewModel: settingsViewModel)
         
         settingsViewController.delegate = self
@@ -119,24 +120,38 @@ extension TabBarController : WebViewControllerDelegate {
 
 extension TabBarController: LoginViewControllerDelegate {
     func loginViewControllerNeedToGoHome(_ viewController: LoginViewController, withEmail email: String) {
-        if let settingsVC = settingsNavController.viewControllers.first as? SettingsViewController {
-            settingsVC.viewModel.email = email
+        
+        // Store the email when the user logs in
+        self.userEmail = email
+                
+        // Pass the email to the SettingsViewModel
+        let settingsViewModel = SettingsViewModel(email: email)
+                
+        // Initialize the SettingsViewController with the updated SettingsViewModel
+        let settingsViewController = SettingsViewController(viewModel: settingsViewModel)
+        settingsNavController.setViewControllers([settingsViewController], animated: false)
+       
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            appDelegate.switchToTabBarController()
         }
+    }
+}
+
+extension TabBarController: SignUpViewControllerDelegate {
+    func signUpViewControllerDidSignUp(_ viewController: SignUpViewController, withEmail: String) {
         viewController.dismiss(animated: false, completion: nil)
     }
+    
+    
 }
 
 extension TabBarController: OnBoardingViewControllerDelegate {
     func onboardingDidFinish(_ controller: OnBoardingViewController) {
-        controller.dismiss(animated: false) { [weak self] in
-            guard let self = self else { return }
-            
-            let loginViewModel = LoginViewModel()
-            let loginController = LoginViewController(viewModel: loginViewModel)
-            loginController.delegate = self
-            loginController.modalPresentationStyle = .fullScreen
-            self.present(loginController, animated: false, completion: nil)
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            appDelegate.presentLoginViewController()
         }
     }
+    
 }
+
 
