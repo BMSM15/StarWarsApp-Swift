@@ -39,8 +39,6 @@ class CustomCollectionViewLayout: UICollectionViewLayout {
         
         guard let collectionView = collectionView else { return }
         
-        
-        // Reset cached information.
         cachedAttributes.removeAll()
         contentBounds = CGRect(origin: .zero, size: collectionView.bounds.size)
         let collectionWidth = collectionView.bounds.size.width
@@ -48,7 +46,6 @@ class CustomCollectionViewLayout: UICollectionViewLayout {
         var maxX: CGFloat = 0
         var contentHeight: CGFloat = 0
         var columnWidth: CGFloat = 0
-        
 
         for section in (0..<collectionView.numberOfSections) {
             
@@ -102,12 +99,18 @@ class CustomCollectionViewLayout: UICollectionViewLayout {
                                       height: columnWidth * numberOfRowsForItem + (numberOfRowsForItem - 1) * lineSpacing)
                     }
                 }()
+                var x: CGFloat = 0
                 
-                var x = lastFrame.maxX + interitemSpacing
+                if currentIndex == 0 {
+                    x = interitemSpacing
+                } else {
+                     x = lastFrame.maxX + interitemSpacing
+                }
+                
                 var y = lastFrame.minY
-                
+
                 if x + itemSize.width > collectionWidth - sectionInset.right {
-                    x = lastFrame.minX
+                    x = sectionInset.left
                     y = lastFrame.maxY + lineSpacing
                 }
                 
@@ -143,30 +146,6 @@ class CustomCollectionViewLayout: UICollectionViewLayout {
             }
         }
         return visibleLayoutAttributes
-
-//        var attributesArray = [UICollectionViewLayoutAttributes]()
-//        
-//        // Find any cell that sits within the query rect.
-//        guard let lastIndex = cachedAttributes.indices.last,
-//              let firstMatchIndex = binSearch(rect, start: 0, end: lastIndex) else { return attributesArray }
-//        
-//        // Starting from the match, loop up and down through the array until all the attributes
-//        // have been added within the query rect.
-//        for sectionAttributes in cachedAttributes {
-//            for attributes in sectionAttributes[..<firstMatchIndex].reversed() {
-//                guard attributes.frame.maxY >= rect.minY else { break }
-//                attributesArray.append(attributes)
-//            }
-//        }
-//        
-//        for sectionAttributes in cachedAttributes {
-//            for attributes in sectionAttributes[firstMatchIndex...] {
-//                guard attributes.frame.minY <= rect.maxY else { break }
-//                attributesArray.append(attributes)
-//            }
-//        }
-//        
-//        return attributesArray
     }
 
     
@@ -177,20 +156,6 @@ class CustomCollectionViewLayout: UICollectionViewLayout {
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         return cachedAttributes[indexPath.section][indexPath.item]
     }
-    
-//    private func binSearch(_ rect: CGRect, start: Int, end: Int) -> Int? {
-//        if start > end { return nil }
-//        
-//        let mid = (start + end) / 2
-//        let attributes = cachedAttributes[mid]
-//        
-//        if attributes.frame.intersects(rect) {
-//            return mid
-//        } else if attributes.frame.maxY < rect.minY {
-//            return binSearch(rect, start: mid + 1, end: end)
-//        } else {
-//            return binSearch(rect, start: start, end: mid - 1)
-//        }
-//    }
+
 }
 

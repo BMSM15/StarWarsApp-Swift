@@ -6,8 +6,8 @@
     "images": [
         {
             "url": "https://images.pexels.com/photos/1076039/pexels-photo-1076039.jpeg",
-            "width": 2,
-            "height": 2
+            "width": 1,
+            "height": 1
         },
         {
             "url": "https://images.pexels.com/photos/255379/pexels-photo-255379.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
@@ -22,7 +22,7 @@
         {
             "url": "https://images.pexels.com/photos/688574/pexels-photo-688574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
             "width": 1,
-            "height": 2
+            "height": 1
         }
     ],
     "links": [

@@ -122,7 +122,6 @@ class DetailsViewController: UIViewController {
         principalStackView.pinTrailing(to: view, constant: 10)
         principalStackView.pinLeading(to: view, constant: 10)
         
-        textStackView.pinTop(to: principalStackView, constant: 50)
         textStackView.pinLeading(to: principalStackView, constant: 10)
         textStackView.widthEqual(to: principalStackView, multiplier: 0.5)
         

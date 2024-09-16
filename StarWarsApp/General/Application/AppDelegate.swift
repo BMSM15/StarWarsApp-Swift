@@ -22,7 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         print("LaunchCount - \(launchCount)")
         
-        // Check if the onboarding screen should be shown
         if shouldShowOnboarding(launchCount: launchCount) {
             let onBoardingViewModel = OnBoardingViewModel()
             let onBoardingViewController = OnBoardingViewController(viewModel: onBoardingViewModel)

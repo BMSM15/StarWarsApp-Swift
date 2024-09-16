@@ -62,13 +62,13 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         view.addSubview(collectionView)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(NameAgeCell.self, forCellWithReuseIdentifier: "NameAgeCell")
-        collectionView.register(GalleryCell.self, forCellWithReuseIdentifier: "GalleryCell")
-        collectionView.register(ProfileImageCell.self, forCellWithReuseIdentifier: "ProfileImageCell")
-        collectionView.register(VideoCell.self, forCellWithReuseIdentifier: "VideoCell")
-        collectionView.register(LinkCell.self, forCellWithReuseIdentifier: "LinkCell")
-        collectionView.register(LogoutCell.self, forCellWithReuseIdentifier: "LogoutCell")
-        collectionView.register(HeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderCell")
+        collectionView.register(NameAgeCell.self, forCellWithReuseIdentifier: CellIndentifier.nameAgeCell)
+        collectionView.register(GalleryCell.self, forCellWithReuseIdentifier: CellIndentifier.galleryCell)
+        collectionView.register(ProfileImageCell.self, forCellWithReuseIdentifier: CellIndentifier.profileImageCell)
+        collectionView.register(VideoCell.self, forCellWithReuseIdentifier: CellIndentifier.videoCell)
+        collectionView.register(LinkCell.self, forCellWithReuseIdentifier: CellIndentifier.linkCell)
+        collectionView.register(LogoutCell.self, forCellWithReuseIdentifier: CellIndentifier.logoutCell)
+        collectionView.register(HeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CellIndentifier.headerCell)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.pin(to: view)
         print("💡 setupCollectionView")
@@ -199,24 +199,6 @@ class SettingsViewController: UIViewController, UICollectionViewDataSource, UICo
         case .image(_, let numberOfColumns, let numberOfRows):
             
             return .grid(numberOfColumns: numberOfColumns, numberOfRows: numberOfRows)
-            //            let numberOfColumns: CGFloat = 2
-            //            let numberOfColumnsForItem = CGFloat(numberOfColumnsForItem)
-            //            let numberOfRowsForItem = CGFloat(numberOfRowsForItem)
-            //
-            //            let sectionInset = self.collectionView(collectionView, layout: collectionViewLayout, insetForSectionAt: indexPath.section)
-            //            let lineSpacing = self.collectionView(collectionView, layout: collectionViewLayout, minimumLineSpacingForSectionAt: indexPath.section)
-            //            let interItemSpacing = self.collectionView(collectionView, layout: collectionViewLayout, minimumInteritemSpacingForSectionAt: indexPath.section)
-            //
-            //            let columnWidth: CGFloat = {
-            //                var availableWidth: CGFloat = collectionView.bounds.width
-            //                availableWidth -= (sectionInset.left + sectionInset.right)
-            //                availableWidth -= (numberOfColumns - 1) * interItemSpacing
-            //                return availableWidth / numberOfColumns
-            //            }()
-            //
-            //
-            //            return CGSize(width: columnWidth * numberOfColumnsForItem + (numberOfColumnsForItem - 1) * interItemSpacing,
-            //                          height: columnWidth * numberOfRowsForItem + (numberOfRowsForItem - 1) * lineSpacing)
         }
         
     }

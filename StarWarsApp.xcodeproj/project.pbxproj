@@ -190,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				AA2B63D72C622073002F1E5F /* UImageView.swift */,
+				AA3644D92C528E3B0096A146 /* Button.swift */,
 				AA25EE962C611DE7001BF9B4 /* UIView.swift */,
 				AA00CBF32C92FD6000DA9C6A /* UITextField.swift */,
 				AA00CBF52C92FDA300DA9C6A /* UIDatePicker.swift */,
@@ -220,14 +221,6 @@
 				AA2E0C642C907FD100D5AF84 /* SignUpViewModel.swift */,
 			);
 			path = SignUp;
-			sourceTree = "<group>";
-		};
-		AA3644D82C528E1C0096A146 /* Component */ = {
-			isa = PBXGroup;
-			children = (
-				AA3644D92C528E3B0096A146 /* Button.swift */,
-			);
-			path = Component;
 			sourceTree = "<group>";
 		};
 		AA384FFB2C59427D001A46F7 /* Settings */ = {
@@ -377,7 +370,6 @@
 				AA3E960A2C49151100080279 /* Data */,
 				AA43F9B82C5116D600665B1F /* Error */,
 				AA4366C32C4800C800712862 /* Application */,
-				AA3644D82C528E1C0096A146 /* Component */,
 				AA47AD772C73905C0079F6CB /* OnBoarding */,
 				AA2E0C612C907F9100D5AF84 /* SignUp */,
 				AA2752DF2C76059A000AAE24 /* Login */,
